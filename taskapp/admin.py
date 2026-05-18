@@ -1,5 +1,29 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import GroupAdmin as DjangoGroupAdmin
+from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
+from django.contrib.auth.models import Group
+from django.urls import reverse
+from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
+
 from .models import Cars, Mechanic, Task
+from .rbac import MANAGER_GROUP, get_mechanic_profile
+
+User = get_user_model()
+if admin.site.is_registered(User):
+    admin.site.unregister(User)
+
+if admin.site.is_registered(Group):
+    admin.site.unregister(Group)
+
+
+@admin.register(Group)
+class GroupAdmin(DjangoGroupAdmin):
+    """No bulk actions; column headers are plain text (no sort links)."""
+
+    actions = None
+    sortable_by = ()
 
 
 @admin.register(Mechanic)
@@ -153,3 +177,62 @@ class TaskAdmin(admin.ModelAdmin):
         'status',
         '-created_at',
     )
+
+
+@admin.register(User)
+class UserAdmin(DjangoUserAdmin):
+    _list_display = list(DjangoUserAdmin.list_display)
+    _list_display.insert(_list_display.index('username') + 1, 'shop_role_display')
+    _list_display.append('user_actions_display')
+    list_display = tuple(_list_display)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.prefetch_related('groups').select_related('mechanic_profile')
+
+    @admin.display(description=_('Role'), ordering=False)
+    def shop_role_display(self, obj):
+        if obj.is_superuser:
+            css = 'badge rounded-pill bg-warning text-dark'
+            label = _('Superuser')
+        elif any(g.name == MANAGER_GROUP for g in obj.groups.all()):
+            css = 'badge rounded-pill bg-primary'
+            label = _('Manager')
+        elif get_mechanic_profile(obj) is not None:
+            css = 'badge rounded-pill bg-info text-dark'
+            label = _('Mechanic')
+        else:
+            return format_html('<span class="text-muted">—</span>')
+        return format_html('<span class="{}">{}</span>', css, label)
+
+    @admin.display(description=_('Actions'), ordering=False)
+    def user_actions_display(self, obj):
+        opts = User._meta
+        change_url = reverse(
+            f'admin:{opts.app_label}_{opts.model_name}_change',
+            args=[obj.pk],
+        )
+        delete_url = reverse(
+            f'admin:{opts.app_label}_{opts.model_name}_delete',
+            args=[obj.pk],
+        )
+        return format_html(
+            '<div class="admin-row-actions" role="group">'
+            '<a class="admin-action-btn admin-action-btn--edit" href="{}" title="{}" aria-label="{}">'
+            '<i class="fas fa-edit" aria-hidden="true"></i>'
+            '<span class="admin-action-btn__label">{}</span>'
+            '</a>'
+            '<a class="admin-action-btn admin-action-btn--delete" href="{}" title="{}" aria-label="{}">'
+            '<i class="fas fa-trash-alt" aria-hidden="true"></i>'
+            '<span class="admin-action-btn__label">{}</span>'
+            '</a>'
+            '</div>',
+            change_url,
+            _('Edit this user'),
+            _('Edit'),
+            _('Edit'),
+            delete_url,
+            _('Delete this user'),
+            _('Delete'),
+            _('Delete'),
+        )

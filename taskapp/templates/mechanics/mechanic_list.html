@@ -59,9 +59,25 @@
                     </select>
                 </form>
             </td>
-            <td>
-                <a href="{% url 'mechanic_update' mechanic.id %}" class="btn btn-warning btn-sm">Edit</a>
-                <a href="{% url 'mechanic_delete' mechanic.id %}" class="btn btn-danger btn-sm">Delete</a>
+            <td class="shop-actions-cell text-nowrap">
+                <div class="shop-row-actions" role="group">
+                    <a
+                        class="shop-action-btn shop-action-btn--edit"
+                        href="{% url 'mechanic_update' mechanic.id %}"
+                        title="Edit mechanic {{ mechanic.name }}"
+                        aria-label="Edit"
+                        ><i class="fas fa-edit" aria-hidden="true"></i
+                        ><span class="shop-action-btn__label">Edit</span></a
+                    >
+                    <a
+                        class="shop-action-btn shop-action-btn--delete"
+                        href="{% url 'mechanic_delete' mechanic.id %}"
+                        title="Delete mechanic {{ mechanic.name }}"
+                        aria-label="Delete"
+                        ><i class="fas fa-trash-alt" aria-hidden="true"></i
+                        ><span class="shop-action-btn__label">Delete</span></a
+                    >
+                </div>
             </td>
         </tr>
         {% endfor %}

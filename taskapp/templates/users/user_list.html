@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load shop_extras %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <h2 class="mb-0">Users</h2>
+  <a href="{% url 'shop_user_create' %}" class="btn btn-primary">Add user</a>
+</div>
+
+<table class="table table-bordered table-striped align-middle">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Role</th>
+      <th>Email</th>
+      <th>Staff</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in shop_users %}
+    <tr>
+      <td>{{ u.username }}</td>
+      <td>{% shop_role_badge u %}</td>
+      <td>{% if u.email %}{{ u.email }}{% else %}<span class="text-muted">—</span>{% endif %}</td>
+      <td>{% if u.is_staff %}Yes{% else %}No{% endif %}</td>
+      <td class="shop-actions-cell text-nowrap">
+        <div class="shop-row-actions" role="group">
+          <a
+            class="shop-action-btn shop-action-btn--edit"
+            href="{% url 'shop_user_update' u.pk %}"
+            title="{% trans 'Edit user' %} {{ u.username }}"
+            aria-label="{% trans 'Edit' %}"
+            ><i class="fas fa-edit" aria-hidden="true"></i
+            ><span class="shop-action-btn__label">{% trans 'Edit' %}</span></a
+          >
+          {% if u.pk != request.user.pk %}
+          <a
+            class="shop-action-btn shop-action-btn--delete"
+            href="{% url 'shop_user_delete' u.pk %}"
+            title="{% trans 'Delete user' %} {{ u.username }}"
+            aria-label="{% trans 'Delete' %}"
+            ><i class="fas fa-trash-alt" aria-hidden="true"></i
+            ><span class="shop-action-btn__label">{% trans 'Delete' %}</span></a
+          >
+          {% endif %}
+        </div>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="5" class="text-muted">No users.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

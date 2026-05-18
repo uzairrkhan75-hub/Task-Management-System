@@ -97,13 +97,25 @@
         {% endif %}
       </td>
       {% if is_shop_manager %}
-      <td>
-        <a href="{% url 'task_update' task.id %}" class="btn btn-warning btn-sm"
-          >Edit</a
-        >
-        <a href="{% url 'task_delete' task.id %}" class="btn btn-danger btn-sm"
-          >Delete</a
-        >
+      <td class="shop-actions-cell text-nowrap">
+        <div class="shop-row-actions" role="group">
+          <a
+            class="shop-action-btn shop-action-btn--edit"
+            href="{% url 'task_update' task.id %}"
+            title="Edit task {{ task.title }}"
+            aria-label="Edit"
+            ><i class="fas fa-edit" aria-hidden="true"></i
+            ><span class="shop-action-btn__label">Edit</span></a
+          >
+          <a
+            class="shop-action-btn shop-action-btn--delete"
+            href="{% url 'task_delete' task.id %}"
+            title="Delete task {{ task.title }}"
+            aria-label="Delete"
+            ><i class="fas fa-trash-alt" aria-hidden="true"></i
+            ><span class="shop-action-btn__label">Delete</span></a
+          >
+        </div>
       </td>
       {% endif %}
     </tr>

@@ -412,3 +412,171 @@ body[data-dashboard-theme="light"] .page-item.active .page-link {
   flex: 0 0 100% !important;
   max-width: 100% !important;
 }
+
+/* User changelist — row actions (icon + pill, spaced, accessible) */
+.admin-row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.38rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  border-radius: 999px;
+  text-decoration: none !important;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.admin-action-btn i {
+  font-size: 0.76rem;
+  opacity: 0.95;
+}
+
+.admin-action-btn__label {
+  position: relative;
+  top: 0.02em;
+}
+
+.admin-action-btn--edit {
+  color: #e0f2fe !important;
+  background: rgba(56, 189, 248, 0.14);
+  border-color: rgba(56, 189, 248, 0.38);
+}
+
+.admin-action-btn--edit:hover {
+  color: #f8fafc !important;
+  background: rgba(56, 189, 248, 0.26);
+  border-color: rgba(125, 211, 252, 0.55);
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.2);
+  transform: translateY(-1px);
+}
+
+.admin-action-btn--delete {
+  color: #fecaca !important;
+  background: rgba(248, 113, 113, 0.12);
+  border-color: rgba(248, 113, 113, 0.38);
+}
+
+.admin-action-btn--delete:hover {
+  color: #fef2f2 !important;
+  background: rgba(239, 68, 68, 0.24);
+  border-color: rgba(252, 165, 165, 0.55);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.18);
+  transform: translateY(-1px);
+}
+
+.admin-action-btn:focus-visible {
+  outline: 2px solid rgba(125, 211, 252, 0.95);
+  outline-offset: 2px;
+}
+
+.admin-action-btn--delete:focus-visible {
+  outline-color: rgba(252, 165, 165, 0.95);
+}
+
+body[data-dashboard-theme="light"]
+  .content-wrapper
+  .table
+  td
+  .admin-action-btn--edit,
+body[data-dashboard-theme="light"]
+  .content-wrapper
+  .table
+  tbody
+  tr:hover
+  .admin-action-btn--edit {
+  color: #0369a1 !important;
+  background: rgba(14, 165, 233, 0.1) !important;
+  border-color: rgba(14, 165, 233, 0.32) !important;
+}
+
+body[data-dashboard-theme="light"]
+  .content-wrapper
+  .table
+  td
+  .admin-action-btn--edit:hover,
+body[data-dashboard-theme="light"]
+  .content-wrapper
+  .table
+  tbody
+  tr:hover
+  .admin-action-btn--edit:hover {
+  color: #0c4a6e !important;
+  background: rgba(14, 165, 233, 0.18) !important;
+  border-color: rgba(2, 132, 199, 0.45) !important;
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.18) !important;
+}
+
+body[data-dashboard-theme="light"]
+  .content-wrapper
+  .table
+  td
+  .admin-action-btn--delete,
+body[data-dashboard-theme="light"]
+  .content-wrapper
+  .table
+  tbody
+  tr:hover
+  .admin-action-btn--delete {
+  color: #b91c1c !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+  border-color: rgba(239, 68, 68, 0.32) !important;
+}
+
+body[data-dashboard-theme="light"]
+  .content-wrapper
+  .table
+  td
+  .admin-action-btn--delete:hover,
+body[data-dashboard-theme="light"]
+  .content-wrapper
+  .table
+  tbody
+  tr:hover
+  .admin-action-btn--delete:hover {
+  color: #991b1b !important;
+  background: rgba(239, 68, 68, 0.14) !important;
+  border-color: rgba(220, 38, 38, 0.42) !important;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.12) !important;
+}
+
+body[data-dashboard-theme="light"]
+  .content-wrapper
+  .table
+  td
+  .admin-action-btn:focus-visible {
+  outline-color: rgba(2, 132, 199, 0.85);
+}
+
+body[data-dashboard-theme="light"]
+  .content-wrapper
+  .table
+  td
+  .admin-action-btn--delete:focus-visible {
+  outline-color: rgba(220, 38, 38, 0.75);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-action-btn {
+    transition: none;
+  }
+
+  .admin-action-btn:hover {
+    transform: none;
+  }
+}

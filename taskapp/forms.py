@@ -1,9 +1,14 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import get_user_model, password_validation
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import Group
+from django.core.exceptions import ValidationError
 from django.db.models import Exists, OuterRef
 
 from .models import Mechanic, Task
-from .rbac import users_available_for_mechanic_link
+from .rbac import MANAGER_GROUP, users_available_for_mechanic_link
+
+User = get_user_model()
 
 
 class ShopAuthenticationForm(AuthenticationForm):
@@ -116,3 +121,133 @@ class TaskForm(forms.ModelForm):
             'name',
         )
         mech_field.choices = grouped
+
+
+class ShopUserCreateForm(UserCreationForm):
+    """Create login accounts from the shop UI (managers)."""
+
+    email = forms.EmailField(
+        required=False,
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+    )
+    first_name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+    )
+    last_name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
+    )
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    def __init__(self, *args, acting_user=None, **kwargs):
+        self.acting_user = acting_user
+        super().__init__(*args, **kwargs)
+        for name in ('username', 'password1', 'password2'):
+            if name in self.fields:
+                self.fields[name].widget.attrs.setdefault('class', 'form-control')
+        if acting_user and acting_user.is_superuser:
+            self.fields['is_staff'] = forms.BooleanField(
+                required=False,
+                initial=False,
+                label='Staff (Django admin access)',
+            )
+            self.fields['grant_manager_role'] = forms.BooleanField(
+                required=False,
+                initial=False,
+                label='Manager role (full shop access)',
+            )
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data.get('email', '') or ''
+        user.first_name = self.cleaned_data.get('first_name', '') or ''
+        user.last_name = self.cleaned_data.get('last_name', '') or ''
+        user.is_superuser = False
+        if self.acting_user and self.acting_user.is_superuser:
+            user.is_staff = self.cleaned_data.get('is_staff', False)
+        else:
+            user.is_staff = False
+        if commit:
+            user.save()
+            if self.acting_user and self.acting_user.is_superuser:
+                if self.cleaned_data.get('grant_manager_role'):
+                    mgr_g = Group.objects.get(name=MANAGER_GROUP)
+                    user.groups.add(mgr_g)
+        return user
+
+
+class ShopUserUpdateForm(forms.ModelForm):
+    grant_manager_role = forms.BooleanField(
+        required=False,
+        label='Manager role (full shop access)',
+    )
+    new_password1 = forms.CharField(
+        required=False,
+        strip=False,
+        label='New password',
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control', 'autocomplete': 'new-password'},
+        ),
+    )
+    new_password2 = forms.CharField(
+        required=False,
+        strip=False,
+        label='Confirm new password',
+        widget=forms.PasswordInput(
+            attrs={'class': 'form-control', 'autocomplete': 'new-password'},
+        ),
+    )
+
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name')
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, acting_user=None, **kwargs):
+        self.acting_user = acting_user
+        super().__init__(*args, **kwargs)
+        if acting_user and acting_user.is_superuser:
+            self.fields['grant_manager_role'].initial = self.instance.groups.filter(
+                name=MANAGER_GROUP,
+            ).exists()
+            self.fields['is_staff'] = forms.BooleanField(
+                required=False,
+                label='Staff (Django admin access)',
+                initial=self.instance.is_staff,
+            )
+        else:
+            del self.fields['grant_manager_role']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        p1 = cleaned_data.get('new_password1')
+        p2 = cleaned_data.get('new_password2')
+        if p1 or p2:
+            if p1 != p2:
+                raise ValidationError('The two password fields do not match.')
+            password_validation.validate_password(p1, self.instance)
+        return cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if self.acting_user and self.acting_user.is_superuser:
+            user.is_staff = self.cleaned_data.get('is_staff', False)
+        pwd = self.cleaned_data.get('new_password1')
+        if pwd:
+            user.set_password(pwd)
+        if commit:
+            user.save()
+        if self.acting_user and self.acting_user.is_superuser:
+            mgr_g = Group.objects.get(name=MANAGER_GROUP)
+            if self.cleaned_data.get('grant_manager_role'):
+                user.groups.add(mgr_g)
+            else:
+                user.groups.remove(mgr_g)
+        return user

@@ -30,6 +30,22 @@ urlpatterns = [
         views.MechanicDeleteView.as_view(),
         name='mechanic_delete',
     ),
+    path('users/', views.ShopUserListView.as_view(), name='shop_user_list'),
+    path(
+        'users/create/',
+        views.ShopUserCreateView.as_view(),
+        name='shop_user_create',
+    ),
+    path(
+        'users/<int:pk>/update/',
+        views.ShopUserUpdateView.as_view(),
+        name='shop_user_update',
+    ),
+    path(
+        'users/<int:pk>/delete/',
+        views.ShopUserDeleteView.as_view(),
+        name='shop_user_delete',
+    ),
     path(
         'mechanics/<int:pk>/availability/',
         views.mechanic_set_availability,

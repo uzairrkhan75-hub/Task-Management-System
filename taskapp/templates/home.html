@@ -1,135 +1,161 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
 
-<div class="card shadow-sm border-0 mb-4 home-hero-card">
-  <div
-    class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3"
-  >
-    <div>
-      <h4 class="mb-2">Customer Repair ETA</h4>
-      {% if next_task %}
-      <p class="mb-1">
-        <strong>{{ next_task.car.registration_number }}</strong> is currently
-        expected by
-        <strong
-          >{{ next_task.promised_completion_at|date:"M d, Y, g:i a" }}</strong
-        >.
-      </p>
-      <p class="mb-0 text-muted">
-        Task: {{ next_task.title }} | Status: {{ next_task.get_status_display }}
-      </p>
-      {% else %}
-      <p class="mb-0 text-muted">
-        No active repair is scheduled yet. Add a task with estimated hours to
-        generate the expected completion time.
-      </p>
-      {% endif %}
-    </div>
-    <div class="text-md-end">
-      {% if next_task %}
-      {% if next_task.is_overdue %}
-      <span class="status-badge status-badge--overdue px-3 py-2">Overdue</span>
-      {% elif next_task.status == 'in_progress' %}
-      {% include 'includes/status_badge.html' with status=next_task.status label=next_task.get_status_display %}
-      {% elif next_task.status == 'completed' %}
-      {% include 'includes/status_badge.html' with status=next_task.status label=next_task.get_status_display %}
-      {% else %}
-      <span class="status-badge status-badge--scheduled px-3 py-2">Scheduled</span>
-      {% endif %}
-      {% else %}
-      <span class="status-badge status-badge--no-eta px-3 py-2">No ETA Yet</span>
-      {% endif %}
-    </div>
-  </div>
-</div>
+{% block content %}
 
-<div class="row g-4 mb-4">
-  <div class="col-md-3">
-    <div class="card shadow-sm h-100">
-      <div class="card-body">
-        <h6 class="text-muted mb-2">Cars</h6>
-        <h2 class="mb-0">{{ total_cars }}</h2>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card shadow-sm h-100">
-      <div class="card-body">
-        <h6 class="text-muted mb-2">Active Tasks</h6>
-        <h2 class="mb-0">{{ active_tasks }}</h2>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card shadow-sm h-100">
-      <div class="card-body">
-        <h6 class="text-muted mb-2">Due in 24h</h6>
-        <h2 class="mb-0">{{ due_soon }}</h2>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-3">
-    <div class="card shadow-sm h-100">
-      <div class="card-body">
-        <h6 class="text-muted mb-2">Overdue</h6>
-        <h2 class="mb-0">{{ overdue_tasks }}</h2>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="row g-4">
-  <div class="col-lg-8">
-    <div class="card shadow-sm h-100">
-      <div class="card-header bg-body-secondary border-bottom">
-        <strong>Repair ETA Overview</strong>
-      </div>
-      <div class="card-body">
+<div class="dashboard-home">
+  <div class="card border-0 mb-4 home-hero-card dashboard-hero">
+    <div
+      class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3"
+    >
+      <div>
+        <h4 class="mb-2 dashboard-hero__title">Customer Repair ETA</h4>
         {% if next_task %}
-        <div class="row align-items-center">
-          <div class="col-md-8">
-            <h4 class="mb-2">Next expected completion</h4>
-            <p class="mb-1">
-              <strong>{{ next_task.title }}</strong> for
-              {{ next_task.car.registration_number }}
-            </p>
-            <p class="mb-1 text-muted">
-              Customer: {{ next_task.car.customer_name|default:'Not provided' }}
-            </p>
-            <p class="mb-0">
-              ETA: {{ next_task.promised_completion_at|date:"M d, Y, g:i a" }}
-            </p>
-          </div>
-          <div class="col-md-4 text-md-end mt-3 mt-md-0">
-            {% if next_task.is_overdue %}
-            <span class="status-badge status-badge--overdue">Overdue</span>
-            {% elif next_task.status == 'in_progress' %}
-            {% include 'includes/status_badge.html' with status=next_task.status label=next_task.get_status_display %}
-            {% elif next_task.status == 'completed' %}
-            {% include 'includes/status_badge.html' with status=next_task.status label=next_task.get_status_display %}
-            {% else %}
-            <span class="status-badge status-badge--planned">Planned</span>
-            {% endif %}
-          </div>
-        </div>
+        <p class="mb-1 dashboard-hero__lead">
+          <strong>{{ next_task.car.registration_number }}</strong> is currently
+          expected by
+          <strong>{{ next_task.promised_completion_at|date:"M d, Y, g:i a" }}</strong>.
+        </p>
+        <p class="mb-0 dashboard-hero__meta">
+          Task: {{ next_task.title }} | Status: {{ next_task.get_status_display }}
+        </p>
         {% else %}
-        <p class="mb-0 text-muted">No active repair ETA available yet.</p>
+        <p class="mb-0 dashboard-hero__meta">
+          No active repair is scheduled yet. Add a task with estimated hours to
+          generate the expected completion time.
+        </p>
+        {% endif %}
+      </div>
+      <div class="text-md-end flex-shrink-0">
+        {% if next_task %}
+        {% if next_task.is_overdue %}
+        <span class="status-badge status-badge--overdue px-3 py-2">Overdue</span>
+        {% elif next_task.status == 'in_progress' %}
+        {% include 'includes/status_badge.html' with status=next_task.status label=next_task.get_status_display %}
+        {% elif next_task.status == 'completed' %}
+        {% include 'includes/status_badge.html' with status=next_task.status label=next_task.get_status_display %}
+        {% else %}
+        <span class="status-badge status-badge--scheduled px-3 py-2">Scheduled</span>
+        {% endif %}
+        {% else %}
+        <span class="status-badge status-badge--no-eta px-3 py-2">No ETA Yet</span>
         {% endif %}
       </div>
     </div>
   </div>
-  <div class="col-lg-4">
-    <div class="card shadow-sm h-100">
-      <div class="card-header bg-body-secondary border-bottom">
-        <strong>Workflow Notes</strong>
+
+  <div class="row g-4 mb-4 dashboard-stat-row">
+    <div class="col-md-6 col-xl-3">
+      <div class="dashboard-stat-card dashboard-stat-card--cars h-100">
+        <span class="dashboard-stat-card__accent" aria-hidden="true"></span>
+        <div class="card-body dashboard-stat-card__body">
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+            <h6 class="dashboard-stat-card__label mb-0">Cars</h6>
+            <span class="dashboard-stat-card__icon-wrap" aria-hidden="true">
+              <i class="fas fa-car"></i>
+            </span>
+          </div>
+          <p class="dashboard-stat-card__value mb-0">{{ total_cars }}</p>
+        </div>
       </div>
-      <div class="card-body">
-        <p class="mb-2">
-          Enter <strong>estimated hours</strong> on a task to generate the
-          expected completion time automatically.
-        </p>
-        <p class="mb-0">
-          Use the task list to track what is due soon and what has gone overdue.
-        </p>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="dashboard-stat-card dashboard-stat-card--tasks h-100">
+        <span class="dashboard-stat-card__accent" aria-hidden="true"></span>
+        <div class="card-body dashboard-stat-card__body">
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+            <h6 class="dashboard-stat-card__label mb-0">Active Tasks</h6>
+            <span class="dashboard-stat-card__icon-wrap" aria-hidden="true">
+              <i class="fas fa-tasks"></i>
+            </span>
+          </div>
+          <p class="dashboard-stat-card__value mb-0">{{ active_tasks }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="dashboard-stat-card dashboard-stat-card--due h-100">
+        <span class="dashboard-stat-card__accent" aria-hidden="true"></span>
+        <div class="card-body dashboard-stat-card__body">
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+            <h6 class="dashboard-stat-card__label mb-0">Due in 24h</h6>
+            <span class="dashboard-stat-card__icon-wrap" aria-hidden="true">
+              <i class="fas fa-clock"></i>
+            </span>
+          </div>
+          <p class="dashboard-stat-card__value mb-0">{{ due_soon }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+      <div class="dashboard-stat-card dashboard-stat-card--overdue h-100">
+        <span class="dashboard-stat-card__accent" aria-hidden="true"></span>
+        <div class="card-body dashboard-stat-card__body">
+          <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+            <h6 class="dashboard-stat-card__label mb-0">Overdue</h6>
+            <span class="dashboard-stat-card__icon-wrap" aria-hidden="true">
+              <i class="fas fa-exclamation-circle"></i>
+            </span>
+          </div>
+          <p class="dashboard-stat-card__value mb-0">{{ overdue_tasks }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 dashboard-panel-row">
+    <div class="col-lg-8">
+      <div class="dashboard-panel card border-0 h-100">
+        <div class="dashboard-panel__header">
+          <strong class="dashboard-panel__title">Repair ETA Overview</strong>
+        </div>
+        <div class="card-body dashboard-panel__body">
+          {% if next_task %}
+          <div class="row align-items-center">
+            <div class="col-md-8">
+              <h4 class="mb-2 dashboard-panel__heading">Next expected completion</h4>
+              <p class="mb-1 dashboard-panel__emphasis">
+                <strong>{{ next_task.title }}</strong> for
+                {{ next_task.car.registration_number }}
+              </p>
+              <p class="mb-1 dashboard-panel__muted">
+                Customer: {{ next_task.car.customer_name|default:'Not provided' }}
+              </p>
+              <p class="mb-0 dashboard-panel__eta">
+                ETA: {{ next_task.promised_completion_at|date:"M d, Y, g:i a" }}
+              </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+              {% if next_task.is_overdue %}
+              <span class="status-badge status-badge--overdue">Overdue</span>
+              {% elif next_task.status == 'in_progress' %}
+              {% include 'includes/status_badge.html' with status=next_task.status label=next_task.get_status_display %}
+              {% elif next_task.status == 'completed' %}
+              {% include 'includes/status_badge.html' with status=next_task.status label=next_task.get_status_display %}
+              {% else %}
+              <span class="status-badge status-badge--planned">Planned</span>
+              {% endif %}
+            </div>
+          </div>
+          {% else %}
+          <p class="mb-0 dashboard-panel__muted">No active repair ETA available yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="dashboard-panel dashboard-panel--notes card border-0 h-100">
+        <div class="dashboard-panel__header">
+          <strong class="dashboard-panel__title">Workflow Notes</strong>
+        </div>
+        <div class="card-body dashboard-panel__body">
+          <p class="mb-3 dashboard-panel__note">
+            Enter <strong>estimated hours</strong> on a task to generate the
+            expected completion time automatically.
+          </p>
+          <p class="mb-0 dashboard-panel__note dashboard-panel__note--dim">
+            Use the task list to track what is due soon and what has gone overdue.
+          </p>
+        </div>
       </div>
     </div>
   </div>

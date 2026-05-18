@@ -1,0 +1,9 @@
+{% if kind == 'superuser' %}
+<span class="badge rounded-pill bg-warning text-dark">Superuser</span>
+{% elif kind == 'manager' %}
+<span class="badge rounded-pill bg-primary">Manager</span>
+{% elif kind == 'mechanic' %}
+<span class="badge rounded-pill bg-info text-dark">Mechanic</span>
+{% else %}
+<span class="text-muted">—</span>
+{% endif %}

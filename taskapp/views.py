@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.db.models import Exists, OuterRef
@@ -13,7 +14,13 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 
-from .forms import MechanicForm, ShopAuthenticationForm, TaskForm
+from .forms import (
+    MechanicForm,
+    ShopAuthenticationForm,
+    ShopUserCreateForm,
+    ShopUserUpdateForm,
+    TaskForm,
+)
 from .mixins import ShopAccessMixin, ShopManagerRequiredMixin
 from .models import Cars, Mechanic, Task
 from .rbac import (
@@ -22,6 +29,7 @@ from .rbac import (
     resolve_shop_access_role,
 )
 
+User = get_user_model()
 
 '''======== Create your views here========='''
 
@@ -176,6 +184,96 @@ class MechanicDeleteView(ShopManagerRequiredMixin, DeleteView):
     model = Mechanic
     template_name = 'mechanics/mechanic_confirm_delete.html'
     success_url = reverse_lazy('mechanic_list')
+
+
+'''===========SHOP USER VIEWS (managers)=============='''
+
+
+class ShopUserListView(ShopManagerRequiredMixin, ListView):
+    model = User
+    template_name = 'users/user_list.html'
+    context_object_name = 'shop_users'
+
+    def get_queryset(self):
+        qs = (
+            User.objects.order_by('username')
+            .prefetch_related('groups')
+            .select_related('mechanic_profile')
+        )
+        if self.request.user.is_superuser:
+            return qs
+        return qs.filter(is_superuser=False)
+
+
+class ShopUserCreateView(ShopManagerRequiredMixin, CreateView):
+    model = User
+    form_class = ShopUserCreateForm
+    template_name = 'users/user_form.html'
+    success_url = reverse_lazy('shop_user_list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['acting_user'] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['form_heading'] = 'Add user'
+        ctx['edit_username'] = ''
+        return ctx
+
+    def form_valid(self, form):
+        messages.success(self.request, f'User {form.instance.username} created.')
+        return super().form_valid(form)
+
+
+class ShopUserUpdateView(ShopManagerRequiredMixin, UpdateView):
+    model = User
+    form_class = ShopUserUpdateForm
+    template_name = 'users/user_form.html'
+    success_url = reverse_lazy('shop_user_list')
+
+    def get_queryset(self):
+        qs = User.objects.all()
+        if self.request.user.is_superuser:
+            return qs
+        return qs.filter(is_superuser=False)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['acting_user'] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['form_heading'] = 'Edit user'
+        ctx['edit_username'] = self.object.username
+        return ctx
+
+    def form_valid(self, form):
+        messages.success(self.request, f'User {self.object.username} updated.')
+        return super().form_valid(form)
+
+
+class ShopUserDeleteView(ShopManagerRequiredMixin, DeleteView):
+    model = User
+    template_name = 'users/user_confirm_delete.html'
+    success_url = reverse_lazy('shop_user_list')
+
+    def get_queryset(self):
+        qs = User.objects.select_related('mechanic_profile')
+        if self.request.user.is_superuser:
+            return qs
+        return qs.filter(is_superuser=False)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.pk == request.user.pk:
+            messages.error(request, 'You cannot delete your own account.')
+            return redirect(self.success_url)
+        username = self.object.username
+        messages.success(request, f'User {username} deleted.')
+        return super().delete(request, *args, **kwargs)
 
 
 @login_required
