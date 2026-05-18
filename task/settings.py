@@ -110,23 +110,59 @@ USE_TZ = True
 STATIC_URL = 'static/'
 JAZZMIN_SETTINGS = {
 
-    "site_title": "taskapp Admin",
+    "site_title": "Task-Management_system Admin",
 
-    "site_header": "taskapp Management",
+    "site_header": "Task-Management_system Management",
 
-    "site_brand": "taskapp System",
+    "site_brand": "Task-Management_system",
 
-    "welcome_sign": "Welcome to GP Management",
+    "welcome_sign": "Welcome to Task-Management_system",
 
-    "copyright": "GP Task Management",
+    "copyright": "Task-Management_system",
+
+    "site_logo": "taskapp/img/admin-logo.svg",
+
+    "login_logo_dark": "taskapp/img/admin-logo.svg",
 
     "show_sidebar": True,
 
     "navigation_expanded": True,
 
+    "search_model": "taskapp.Cars",
+
+    "custom_css": "taskapp/css/admin-dark.css",
+
+    "custom_js": "taskapp/js/admin-theme-toggle.js",
+
+    "theme": "cyborg",
+
+    "dark_mode_theme": None,
+
+    "show_ui_builder": False,
+
+    "sidebar_fixed": True,
+
+    "navbar_fixed": True,
+
+    "layout_boxed": False,
+
+    "sidebar_nav_compact_style": True,
+
+    "sidebar_nav_flat_style": True,
+
+    "no_navbar_border": True,
+
+    "accent": "accent-info",
+
     "icons": {
-        "gp.Car": "fas fa-car",
-        "gp.Mechanic": "fas fa-user-cog",
-        "gp.Task": "fas fa-tools",
+        "taskapp.cars": "fas fa-car",
+        "taskapp.mechanic": "fas fa-user-cog",
+        "taskapp.task": "fas fa-tools",
+        "auth.user": "fas fa-user",
+        "auth.group": "fas fa-users",
     },
+
+    "default_icon_parents": "fas fa-folder-open",
+
+    "default_icon_children": "fas fa-circle",
 }
