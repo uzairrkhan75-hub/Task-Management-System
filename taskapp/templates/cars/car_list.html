@@ -1,34 +1,43 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Cars</h2>
-    <a href="{% url 'car_create' %}" class="btn btn-primary">Add Car</a>
+  <h2>Cars</h2>
+  <a href="{% url 'car_create' %}" class="btn btn-primary">Add Car</a>
 </div>
 
 <table class="table table-bordered table-striped bg-white">
-    <thead>
-        <tr>
-            <th>Registration</th>
-            <th>Make</th>
-            <th>Model</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for car in cars %}
-        <tr>
-            <td>{{ car.registration_number }}</td>
-            <td>{{ car.make }}</td>
-            <td>{{ car.model }}</td>
-            <td>
-                <a href="{% url 'car_update' car.id %}" class="btn btn-warning btn-sm">Edit</a>
-                <a href="{% url 'car_delete' car.id %}" class="btn btn-danger btn-sm">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
+  <thead>
+    <tr>
+      <th>Registration</th>
+      <th>Make</th>
+      <th>Model</th>
+      <th>Repair ETA</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for car in cars %}
+    <tr>
+      <td>{{ car.registration_number }}</td>
+      <td>{{ car.make }}</td>
+      <td>{{ car.model }}</td>
+      <td>
+        {% if car.repair_eta %} {{ car.repair_eta|date:"M d, Y, g:i a" }} {%
+        else %}
+        <span class="text-muted">Not set</span>
+        {% endif %}
+      </td>
+      <td>
+        <a href="{% url 'car_update' car.id %}" class="btn btn-warning btn-sm"
+          >Edit</a
+        >
+        <a href="{% url 'car_delete' car.id %}" class="btn btn-danger btn-sm"
+          >Delete</a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 
 {% endblock %}

@@ -17,6 +17,7 @@ from .views import (
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('track-car/', views.customer_eta, name='customer_eta'),
     # Cars
     path('cars/', CarListView.as_view(), name='car_list'),
     path('cars/create/', CarCreateView.as_view(), name='car_create'),
@@ -26,8 +27,10 @@ urlpatterns = [
     # Mechanics
     path('mechanics/', MechanicListView.as_view(), name='mechanic_list'),
     path('mechanics/create/', MechanicCreateView.as_view(), name='mechanic_create'),
-    path('mechanics/<int:pk>/update/', MechanicUpdateView.as_view(), name='mechanic_update'),
-    path('mechanics/<int:pk>/delete/', MechanicDeleteView.as_view(), name='mechanic_delete'),
+    path('mechanics/<int:pk>/update/',
+         MechanicUpdateView.as_view(), name='mechanic_update'),
+    path('mechanics/<int:pk>/delete/',
+         MechanicDeleteView.as_view(), name='mechanic_delete'),
 
     # Tasks
     path('tasks/', TaskListView.as_view(), name='task_list'),

@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib import admin
 from .models import Cars, Mechanic, Task
 
 
@@ -65,6 +64,7 @@ class TaskAdmin(admin.ModelAdmin):
         'status',
         'priority',
         'estimated_hours',
+        'promised_completion_at',
         'created_at',
     )
 
@@ -84,6 +84,10 @@ class TaskAdmin(admin.ModelAdmin):
     autocomplete_fields = (
         'car',
         'mechanic',
+    )
+
+    readonly_fields = (
+        'promised_completion_at',
     )
 
     ordering = (

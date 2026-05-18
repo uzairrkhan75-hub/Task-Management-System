@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
@@ -47,6 +50,19 @@ class Cars(models.Model):
 
     def __str__(self):
         return f"{self.registration_number} - {self.make} {self.model}"
+
+    @property
+    def repair_eta(self):
+        next_task = (
+            self.tasks.exclude(status='completed')
+            .filter(promised_completion_at__isnull=False)
+            .order_by('promised_completion_at', 'created_at')
+            .first()
+        )
+        if next_task:
+            return next_task.promised_completion_at
+
+        return None
 
 
 class Task(models.Model):
@@ -98,11 +114,32 @@ class Task(models.Model):
         blank=True
     )
 
+    promised_completion_at = models.DateTimeField(null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['status', '-created_at']
 
+    def save(self, *args, **kwargs):
+        if self.estimated_hours:
+            base_time = self.created_at or timezone.now()
+            self.promised_completion_at = base_time + timedelta(
+                hours=float(self.estimated_hours)
+            )
+        else:
+            self.promised_completion_at = None
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.title} - {self.car.registration_number}"
+
+    @property
+    def is_overdue(self):
+        return (
+            self.promised_completion_at
+            and self.status != 'completed'
+            and self.promised_completion_at < timezone.now()
+        )

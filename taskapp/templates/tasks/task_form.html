@@ -1,20 +1,19 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 
 <div class="card shadow-sm">
-    <div class="card-body">
+  <div class="card-body">
+    <h2 class="mb-4">Task Form</h2>
 
-        <h2 class="mb-4">Task Form</h2>
+    <p class="text-muted mb-3">
+      Set estimated hours to automatically generate the repair completion time.
+    </p>
 
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
 
-            <button type="submit" class="btn btn-success">Save</button>
-        </form>
-
-    </div>
+      <button type="submit" class="btn btn-success">Save</button>
+    </form>
+  </div>
 </div>
 
 {% endblock %}
