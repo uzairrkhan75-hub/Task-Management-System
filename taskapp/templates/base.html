@@ -77,7 +77,11 @@
       <div
         class="container d-flex flex-wrap align-items-center justify-content-between gap-2"
       >
-        <a class="navbar-brand" href="{% url 'home' %}">Drivex</a>
+        <a
+          class="navbar-brand"
+          href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'login' %}{% endif %}"
+          >Drivex</a
+        >
 
         <div class="d-flex flex-wrap align-items-center gap-2 ms-lg-auto">
           <div class="site-nav-links">
@@ -86,22 +90,48 @@
             class="btn {% if request.path == '/track-car/' %}btn-primary{% else %}btn-outline-light{% endif %} me-2"
             >Track Car</a
           >
+          {% if user.is_authenticated and shop_role %}
+          <a
+            href="{% url 'home' %}"
+            class="btn {% if request.path == '/' %}btn-primary{% else %}btn-outline-light{% endif %} me-2"
+            >Dashboard</a
+          >
           <a
             href="{% url 'car_list' %}"
             class="btn {% if request.path|slice:':6' == '/cars/' %}btn-primary{% else %}btn-outline-light{% endif %} me-2"
             >Cars</a
           >
+          {% if is_shop_manager %}
           <a
             href="{% url 'mechanic_list' %}"
             class="btn {% if request.path|slice:':12' == '/mechanics/' %}btn-primary{% else %}btn-outline-light{% endif %} me-2"
             >Mechanics</a
           >
+          {% endif %}
           <a
             href="{% url 'task_list' %}"
             class="btn {% if request.path|slice:':7' == '/tasks/' %}btn-primary{% else %}btn-outline-light{% endif %}"
             >Tasks</a
           >
+          {% endif %}
         </div>
+        {% if user.is_authenticated %}
+        <div class="d-flex align-items-center gap-2 flex-shrink-0">
+          <span class="text-white-50 small d-none d-sm-inline">{{ user.username }}</span>
+          <form method="post" action="{% url 'logout' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-light btn-sm">Log out</button>
+          </form>
+        </div>
+        {% else %}
+        <div class="flex-shrink-0">
+          <a
+            href="{% url 'login' %}"
+            class="btn btn-outline-light btn-sm {% if '/accounts/login/' in request.path %}active{% endif %}"
+            >Log in</a
+          >
+        </div>
+        {% endif %}
         <div class="theme-toggle-group" id="task-site-theme-toggle">
           <span class="theme-toggle-label">Theme</span>
           <label class="theme-switch" title="Toggle light theme">

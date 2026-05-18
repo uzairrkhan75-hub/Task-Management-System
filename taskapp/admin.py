@@ -8,6 +8,7 @@ class MechanicAdmin(admin.ModelAdmin):
     list_display = (
         'name',
         'specialization',
+        'user',
         'availability_display',
         'on_leave',
         'manual_busy',
@@ -30,6 +31,8 @@ class MechanicAdmin(admin.ModelAdmin):
     )
 
     ordering = ('name',)
+
+    autocomplete_fields = ('user',)
 
     @admin.display(boolean=True, description='On leave')
     def on_leave(self, obj):
@@ -105,6 +108,45 @@ class TaskAdmin(admin.ModelAdmin):
 
     readonly_fields = (
         'promised_completion_at',
+        'created_at',
+        'updated_at',
+    )
+
+    fieldsets = (
+        (
+            None,
+            {
+                'fields': (
+                    'title',
+                    'description',
+                    'car',
+                    'mechanic',
+                    'status',
+                    'priority',
+                ),
+            },
+        ),
+        (
+            'Completion time',
+            {
+                'fields': (
+                    'estimated_hours',
+                    'promised_completion_at',
+                ),
+                'description': (
+                    'Enter estimated work hours (e.g. 2.5); after you save, '
+                    'promised completion is set from the task start time plus '
+                    'those hours. Clear hours to remove the promised time.'
+                ),
+            },
+        ),
+        (
+            'Timestamps',
+            {
+                'fields': ('created_at', 'updated_at'),
+                'classes': ('collapse',),
+            },
+        ),
     )
 
     ordering = (

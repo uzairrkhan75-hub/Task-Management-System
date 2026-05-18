@@ -53,10 +53,16 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'taskapp.context_processors.admin_mechanic_task_summary',
+                'taskapp.context_processors.shop_roles',
             ],
         },
     },
 ]
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 WSGI_APPLICATION = 'task.wsgi.application'
 

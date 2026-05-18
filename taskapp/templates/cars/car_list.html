@@ -2,7 +2,9 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Cars</h2>
+  {% if is_shop_manager %}
   <a href="{% url 'car_create' %}" class="btn btn-primary">Add Car</a>
+  {% endif %}
 </div>
 
 <table class="table table-bordered table-striped">
@@ -29,12 +31,16 @@
         {% endif %}
       </td>
       <td>
+        {% if is_shop_manager %}
         <a href="{% url 'car_update' car.id %}" class="btn btn-warning btn-sm"
           >Edit</a
         >
         <a href="{% url 'car_delete' car.id %}" class="btn btn-danger btn-sm"
           >Delete</a
         >
+        {% else %}
+        <span class="text-muted small">View only</span>
+        {% endif %}
       </td>
     </tr>
     {% endfor %}

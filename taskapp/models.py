@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
@@ -18,6 +19,14 @@ class Mechanic(models.Model):
     is_manually_busy = models.BooleanField(
         default=False,
         help_text='When set and there is no open task, shows as Busy.',
+    )
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='mechanic_profile',
+        help_text='Optional login for this mechanic (restricted to assigned tasks only).',
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -143,7 +152,8 @@ class Task(models.Model):
         max_digits=4,
         decimal_places=1,
         null=True,
-        blank=True
+        blank=True,
+        help_text='Work estimate in hours; used to calculate promised completion when you save.',
     )
 
     promised_completion_at = models.DateTimeField(null=True, blank=True)
