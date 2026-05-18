@@ -415,6 +415,13 @@ option {
   border-radius: 999px;
 }
 
+.form-control-navbar,
+.btn-navbar,
+.navbar-search-block .input-group,
+.navbar-search-block .input-group-append {
+  border-radius: 0 !important;
+}
+
 .theme-toggle-group {
   display: inline-flex !important;
   align-items: center !important;
@@ -522,9 +529,13 @@ option {
   display: inline-block !important;
 }
 
+* {
+  overflow-x: hidden !important;
+}
+
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 0px;
 }
 
 ::-webkit-scrollbar-track {

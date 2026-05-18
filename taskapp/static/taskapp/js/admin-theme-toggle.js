@@ -92,6 +92,15 @@
       }
       .theme-switch input[type="checkbox"]:checked ~ .theme-switch-track .theme-switch-icon-dark { display: none !important; }
       .theme-switch input[type="checkbox"]:checked ~ .theme-switch-track .theme-switch-icon-light { display: inline-block !important; }
+
+      input.form-control-navbar,
+      input.form-control-navbar:focus,
+      button.btn-navbar,
+      .form-inline .input-group,
+      .form-inline .input-group-sm,
+      .form-inline .input-group-append {
+        border-radius: 0 !important;
+      }
     `;
     document.head.appendChild(style);
   }
