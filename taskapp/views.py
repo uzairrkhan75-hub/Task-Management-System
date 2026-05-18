@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.db.models import Exists, OuterRef
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
@@ -13,13 +13,11 @@ from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 
-from .forms import MechanicForm, ShopAuthenticationForm, TaskForm, TaskMechanicForm
+from .forms import MechanicForm, ShopAuthenticationForm, TaskForm
 from .mixins import ShopAccessMixin, ShopManagerRequiredMixin
 from .models import Cars, Mechanic, Task
 from .rbac import (
-    get_mechanic_profile,
     is_shop_manager,
-    mechanic_cars_queryset,
     mechanic_tasks_queryset,
     resolve_shop_access_role,
 )
@@ -33,16 +31,23 @@ class ShopLoginView(LoginView):
     redirect_authenticated_user = True
     authentication_form = ShopAuthenticationForm
 
+    def get_default_redirect_url(self):
+        if resolve_shop_access_role(self.request.user) == 'mechanic':
+            return reverse('task_list')
+        return super().get_default_redirect_url()
+
 
 @login_required
 def home(request):
     if resolve_shop_access_role(request.user) is None:
         raise PermissionDenied(
             'Your account has no shop access. Ask an administrator to add you '
-            'to the Shop Manager group or link your login to a mechanic profile.',
+            'to the Manager group or link your login to a mechanic profile.',
         )
+    if resolve_shop_access_role(request.user) == 'mechanic':
+        return redirect('task_list')
     now = timezone.now()
-    tasks = mechanic_tasks_queryset(request.user)
+    tasks = Task.objects.all()
     active_tasks = tasks.exclude(status='completed')
     due_soon = active_tasks.filter(
         promised_completion_at__gte=now,
@@ -55,7 +60,7 @@ def home(request):
         .first()
     )
 
-    cars_scope = mechanic_cars_queryset(request.user)
+    cars_scope = Cars.objects.all()
 
     return render(
         request,
@@ -107,13 +112,13 @@ def customer_eta(request):
 '''===========CAR VIEWS=============='''
 
 
-class CarListView(ShopAccessMixin, ListView):
+class CarListView(ShopManagerRequiredMixin, ListView):
     model = Cars
     template_name = 'cars/car_list.html'
     context_object_name = 'cars'
 
     def get_queryset(self):
-        return mechanic_cars_queryset(self.request.user).prefetch_related('tasks')
+        return Cars.objects.prefetch_related('tasks')
 
 
 class CarCreateView(ShopManagerRequiredMixin, CreateView):
@@ -176,12 +181,9 @@ class MechanicDeleteView(ShopManagerRequiredMixin, DeleteView):
 @login_required
 @require_POST
 def mechanic_set_availability(request, pk):
-    mechanic = get_object_or_404(Mechanic, pk=pk)
-    profile = get_mechanic_profile(request.user)
-
     if not is_shop_manager(request.user):
-        if not profile or profile.pk != mechanic.pk:
-            raise PermissionDenied
+        raise PermissionDenied
+    mechanic = get_object_or_404(Mechanic, pk=pk)
 
     avail = request.POST.get('availability')
     has_tasks = mechanic.tasks.exclude(status='completed').exists()
@@ -222,10 +224,7 @@ def _redirect_after_task_inline(request):
 
 
 def _ensure_task_editable(request, task):
-    if is_shop_manager(request.user):
-        return
-    profile = get_mechanic_profile(request.user)
-    if not profile or task.mechanic_id != profile.pk:
+    if not is_shop_manager(request.user):
         raise PermissionDenied
 
 
@@ -287,22 +286,14 @@ class TaskCreateView(ShopManagerRequiredMixin, CreateView):
     success_url = reverse_lazy('task_list')
 
 
-class TaskUpdateView(ShopAccessMixin, UpdateView):
+class TaskUpdateView(ShopManagerRequiredMixin, UpdateView):
     model = Task
+    form_class = TaskForm
     template_name = 'tasks/task_form.html'
     success_url = reverse_lazy('task_list')
 
-    def get_form_class(self):
-        if is_shop_manager(self.request.user):
-            return TaskForm
-        return TaskMechanicForm
-
     def get_queryset(self):
-        qs = mechanic_tasks_queryset(self.request.user).select_related(
-            'car',
-            'mechanic',
-        )
-        return qs
+        return Task.objects.select_related('car', 'mechanic')
 
 
 class TaskDeleteView(ShopManagerRequiredMixin, DeleteView):

@@ -42,24 +42,6 @@ class MechanicForm(forms.ModelForm):
         user_field.required = False
 
 
-class TaskMechanicForm(forms.ModelForm):
-    """Mechanics may update progress fields only (assigned tasks)."""
-
-    class Meta:
-        model = Task
-        fields = ['description', 'status', 'priority', 'estimated_hours']
-        widgets = {
-            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
-            'status': forms.Select(
-                attrs={'class': 'form-select enum-select enum-task-status'},
-            ),
-            'priority': forms.Select(
-                attrs={'class': 'form-select enum-select enum-task-priority'},
-            ),
-            'estimated_hours': forms.NumberInput(attrs={'class': 'form-control'}),
-        }
-
-
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task

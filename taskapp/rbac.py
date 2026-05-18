@@ -3,15 +3,17 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
-SHOP_MANAGER_GROUP = 'Shop Manager'
+# Django auth Group name for shop managers (not superuser).
+MANAGER_GROUP = 'Manager'
 
 
 def is_shop_manager(user) -> bool:
+    """Superuser or member of Manager group — full shop UI except Django admin internals."""
     if not user.is_authenticated:
         return False
     if user.is_superuser:
         return True
-    return user.groups.filter(name=SHOP_MANAGER_GROUP).exists()
+    return user.groups.filter(name=MANAGER_GROUP).exists()
 
 
 def get_mechanic_profile(user):
@@ -46,19 +48,6 @@ def mechanic_tasks_queryset(user):
     if mech is None:
         return Task.objects.none()
     return Task.objects.filter(mechanic=mech)
-
-
-def mechanic_cars_queryset(user):
-    from .models import Cars
-
-    if not user.is_authenticated:
-        return Cars.objects.none()
-    if is_shop_manager(user):
-        return Cars.objects.all()
-    mech = get_mechanic_profile(user)
-    if mech is None:
-        return Cars.objects.none()
-    return Cars.objects.filter(tasks__mechanic=mech).distinct()
 
 
 def users_available_for_mechanic_link(mechanic_instance):

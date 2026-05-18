@@ -31,16 +31,12 @@
         {% endif %}
       </td>
       <td>
-        {% if is_shop_manager %}
         <a href="{% url 'car_update' car.id %}" class="btn btn-warning btn-sm"
           >Edit</a
         >
         <a href="{% url 'car_delete' car.id %}" class="btn btn-danger btn-sm"
           >Delete</a
         >
-        {% else %}
-        <span class="text-muted small">View only</span>
-        {% endif %}
       </td>
     </tr>
     {% endfor %}

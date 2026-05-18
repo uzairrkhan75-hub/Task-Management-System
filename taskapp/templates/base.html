@@ -79,7 +79,7 @@
       >
         <a
           class="navbar-brand"
-          href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'login' %}{% endif %}"
+          href="{% if shop_role == 'mechanic' %}{% url 'task_list' %}{% elif user.is_authenticated %}{% url 'home' %}{% else %}{% url 'login' %}{% endif %}"
           >Drivex</a
         >
 
@@ -91,6 +91,7 @@
             >Track Car</a
           >
           {% if user.is_authenticated and shop_role %}
+          {% if is_shop_manager %}
           <a
             href="{% url 'home' %}"
             class="btn {% if request.path == '/' %}btn-primary{% else %}btn-outline-light{% endif %} me-2"
@@ -101,7 +102,6 @@
             class="btn {% if request.path|slice:':6' == '/cars/' %}btn-primary{% else %}btn-outline-light{% endif %} me-2"
             >Cars</a
           >
-          {% if is_shop_manager %}
           <a
             href="{% url 'mechanic_list' %}"
             class="btn {% if request.path|slice:':12' == '/mechanics/' %}btn-primary{% else %}btn-outline-light{% endif %} me-2"
@@ -111,7 +111,7 @@
           <a
             href="{% url 'task_list' %}"
             class="btn {% if request.path|slice:':7' == '/tasks/' %}btn-primary{% else %}btn-outline-light{% endif %}"
-            >Tasks</a
+            >{% if shop_role == 'mechanic' %}My tasks{% else %}Tasks{% endif %}</a
           >
           {% endif %}
         </div>

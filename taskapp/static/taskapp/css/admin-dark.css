@@ -59,7 +59,7 @@ body[data-dashboard-theme="light"]
   .select2-container--default
   .select2-selection,
 body[data-dashboard-theme="light"] .select2-dropdown,
-body[data-dashboard-theme="light"] select,
+body[data-dashboard-theme="light"] select:not([multiple]),
 body[data-dashboard-theme="light"] textarea,
 body[data-dashboard-theme="light"] input[type="text"],
 body[data-dashboard-theme="light"] input[type="email"],
@@ -334,4 +334,81 @@ body[data-dashboard-theme="light"] .summary * {
 body[data-dashboard-theme="light"] .page-link:hover,
 body[data-dashboard-theme="light"] .page-item.active .page-link {
   color: #2563eb !important;
+}
+
+/*
+ * Django filter_horizontal (User permissions / Groups): Jazzmin uses float + 48%
+ * width and Bootstrap column limits, which clips long labels next to the scrollbar.
+ */
+.content-wrapper .selector {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  float: none !important;
+  clear: both !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  gap: 12px !important;
+  box-sizing: border-box !important;
+  overflow-x: auto !important;
+}
+
+.content-wrapper .selector-available,
+.content-wrapper .selector-chosen {
+  float: none !important;
+  width: auto !important;
+  flex: 1 1 auto !important;
+  min-width: min(380px, 100%) !important;
+  max-width: none !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+}
+
+.content-wrapper .selector ul.selector-chooser {
+  float: none !important;
+  flex: 0 0 36px !important;
+  width: 36px !important;
+  margin: 0 !important;
+  align-self: center !important;
+  transform: none !important;
+}
+
+.content-wrapper .selector-available select,
+.content-wrapper .selector-chosen select,
+.content-wrapper .selector select[multiple] {
+  height: auto !important;
+  min-height: 17.2em !important;
+  width: 100% !important;
+  min-width: 280px !important;
+  box-sizing: border-box !important;
+  box-shadow: none !important;
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+  padding: 4px 8px 4px 6px !important;
+  font-size: 0.8125rem !important;
+  line-height: 1.35 !important;
+}
+
+.content-wrapper .selector-available select option,
+.content-wrapper .selector-chosen select option {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  padding: 2px 4px !important;
+  white-space: normal !important;
+}
+
+.content-wrapper .selector-available select option:checked,
+.content-wrapper .selector-chosen select option:checked,
+.content-wrapper .selector-available select option:hover,
+.content-wrapper .selector-chosen select option:hover {
+  background-color: #dbeafe !important;
+  color: #111827 !important;
+}
+
+/* Use full content row so each list can grow (avoids edge clipping) */
+.form-group.field-user_permissions > .row > .col-sm-7,
+.form-group.field-groups > .row > .col-sm-7,
+.form-group.field-permissions > .row > .col-sm-7 {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
 }
