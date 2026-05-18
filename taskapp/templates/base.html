@@ -13,19 +13,27 @@
   <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 site-navbar">
       <div class="container">
-        <a class="navbar-brand" href="#">Drivex</a>
+        <a class="navbar-brand" href="{% url 'home' %}">Drivex</a>
 
-        <div>
-          <a href="{% url 'customer_eta' %}" class="btn btn-outline-light me-2"
+        <div class="site-nav-links">
+          <a
+            href="{% url 'customer_eta' %}"
+            class="btn {% if request.path == '/track-car/' %}btn-primary{% else %}btn-outline-light{% endif %} me-2"
             >Track Car</a
           >
-          <a href="{% url 'car_list' %}" class="btn btn-outline-light me-2"
+          <a
+            href="{% url 'car_list' %}"
+            class="btn {% if request.path|slice:':6' == '/cars/' %}btn-primary{% else %}btn-outline-light{% endif %} me-2"
             >Cars</a
           >
-          <a href="{% url 'mechanic_list' %}" class="btn btn-outline-light me-2"
+          <a
+            href="{% url 'mechanic_list' %}"
+            class="btn {% if request.path|slice:':12' == '/mechanics/' %}btn-primary{% else %}btn-outline-light{% endif %} me-2"
             >Mechanics</a
           >
-          <a href="{% url 'task_list' %}" class="btn btn-outline-light"
+          <a
+            href="{% url 'task_list' %}"
+            class="btn {% if request.path|slice:':7' == '/tasks/' %}btn-primary{% else %}btn-outline-light{% endif %}"
             >Tasks</a
           >
         </div>
