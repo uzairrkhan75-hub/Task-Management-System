@@ -254,17 +254,21 @@ class UserAdmin(DjangoUserAdmin):
     @admin.display(description=_('Role'), ordering=False)
     def shop_role_display(self, obj):
         if obj.is_superuser:
-            css = 'badge rounded-pill bg-warning text-dark'
+            variant = 'superuser'
             label = _('Superuser')
         elif any(g.name == MANAGER_GROUP for g in obj.groups.all()):
-            css = 'badge rounded-pill bg-primary'
+            variant = 'manager'
             label = _('Manager')
         elif get_mechanic_profile(obj) is not None:
-            css = 'badge rounded-pill bg-info text-dark'
+            variant = 'mechanic'
             label = _('Mechanic')
         else:
             return format_html('<span class="text-muted">—</span>')
-        return format_html('<span class="{}">{}</span>', css, label)
+        return format_html(
+            '<span class="shop-role-pill shop-role-pill--{}">{}</span>',
+            variant,
+            label,
+        )
 
     @admin.display(description=_('Actions'), ordering=False)
     def user_actions_display(self, obj):

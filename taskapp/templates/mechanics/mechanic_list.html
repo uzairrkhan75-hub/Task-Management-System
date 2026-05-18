@@ -41,13 +41,14 @@
                         <option
                             value="free"
                             {% if not mechanic.is_on_leave and not mechanic.has_active_task and not mechanic.is_manually_busy %}selected{% endif %}
-                            {% if mechanic.has_active_task %}disabled title="Complete or reassign open tasks first"{% endif %}
                         >
                             Free
                         </option>
                         <option
                             value="busy"
-                            {% if not mechanic.is_on_leave and mechanic.has_active_task or mechanic.is_manually_busy %}selected{% endif %}
+                            {% if not mechanic.is_on_leave %}
+                              {% if mechanic.has_active_task or mechanic.is_manually_busy %}selected{% endif %}
+                            {% endif %}
                         >
                             Busy
                         </option>

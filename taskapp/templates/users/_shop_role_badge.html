@@ -1,9 +1,10 @@
+{% load i18n %}
 {% if kind == 'superuser' %}
-<span class="badge rounded-pill bg-warning text-dark">Superuser</span>
+<span class="shop-role-pill shop-role-pill--superuser">{% trans "Superuser" %}</span>
 {% elif kind == 'manager' %}
-<span class="badge rounded-pill bg-primary">Manager</span>
+<span class="shop-role-pill shop-role-pill--manager">{% trans "Manager" %}</span>
 {% elif kind == 'mechanic' %}
-<span class="badge rounded-pill bg-info text-dark">Mechanic</span>
+<span class="shop-role-pill shop-role-pill--mechanic">{% trans "Mechanic" %}</span>
 {% else %}
 <span class="text-muted">—</span>
 {% endif %}

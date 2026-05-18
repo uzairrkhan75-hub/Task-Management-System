@@ -284,16 +284,17 @@ def mechanic_set_availability(request, pk):
     mechanic = get_object_or_404(Mechanic, pk=pk)
 
     avail = request.POST.get('availability')
-    has_tasks = mechanic.tasks.exclude(status='completed').exists()
+    # Same rule as Mechanic.is_busy / list annotate `has_active_task`
+    has_open_tasks = mechanic.is_busy
 
     if avail == 'on_leave':
         mechanic.is_on_leave = True
         mechanic.is_manually_busy = False
     elif avail == 'busy':
         mechanic.is_on_leave = False
-        mechanic.is_manually_busy = not has_tasks
+        mechanic.is_manually_busy = not has_open_tasks
     elif avail == 'free':
-        if has_tasks:
+        if has_open_tasks:
             messages.warning(
                 request,
                 f'{mechanic.name} still has open tasks. Complete or reassign '

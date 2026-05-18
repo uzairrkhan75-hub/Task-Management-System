@@ -4,6 +4,15 @@ from django.urls import reverse
 from .models import Mechanic, Task
 from .rbac import get_mechanic_profile, resolve_shop_access_role
 
+# Bootswatch (must match URLs used in templates / theme toggle JS)
+SITE_BOOTSWATCH_DARK_CSS = (
+    'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cyborg/bootstrap.min.css'
+)
+SITE_BOOTSWATCH_LIGHT_CSS = (
+    'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/flatly/bootstrap.min.css'
+)
+SITE_THEME_COOKIE = 'drivex_site_theme'
+
 
 def admin_mechanic_task_summary(request):
     """Populate admin index dashboard widgets (templates/admin/index.html)."""
@@ -46,4 +55,24 @@ def shop_roles(request):
         'shop_role': role,
         'is_shop_manager': role == 'manager',
         'shop_mechanic': get_mechanic_profile(user) if user.is_authenticated else None,
+    }
+
+
+def site_shop_theme(request):
+    """
+    Initial Bootswatch stylesheet href for base.html.
+
+    Prefer cookie so the first response includes a real <link> (render-blocking),
+    avoiding FOUC from JS-injected stylesheets. Client JS reconciles with
+    localStorage and refreshes the cookie when they differ.
+    """
+    raw = request.COOKIES.get(SITE_THEME_COOKIE, '')
+    theme = raw if raw in ('light', 'dark') else 'dark'
+    return {
+        'site_bootswatch_css': (
+            SITE_BOOTSWATCH_LIGHT_CSS if theme == 'light' else SITE_BOOTSWATCH_DARK_CSS
+        ),
+        'site_bootswatch_dark_url': SITE_BOOTSWATCH_DARK_CSS,
+        'site_bootswatch_light_url': SITE_BOOTSWATCH_LIGHT_CSS,
+        'site_theme_cookie_name': SITE_THEME_COOKIE,
     }

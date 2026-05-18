@@ -3,13 +3,27 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    {% comment %}Bootswatch: real link in markup is render-blocking; JS-only injection caused visible FOUC.{% endcomment %}
+    <link
+      id="task-site-bootstrap-theme"
+      rel="stylesheet"
+      href="{{ site_bootswatch_css }}"
+    />
     <script>
       (function () {
         var KEY = "taskapp-admin-theme";
-        var DARK =
-          "https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cyborg/bootstrap.min.css";
-        var LIGHT =
-          "https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/flatly/bootstrap.min.css";
+        var COOKIE_NAME = "{{ site_theme_cookie_name }}";
+        var DARK = "{{ site_bootswatch_dark_url }}";
+        var LIGHT = "{{ site_bootswatch_light_url }}";
+        function persistCookie(theme) {
+          try {
+            document.cookie =
+              COOKIE_NAME +
+              "=" +
+              (theme === "light" ? "light" : "dark") +
+              "; Path=/; Max-Age=31536000; SameSite=Lax";
+          } catch (e) {}
+        }
         var t;
         try {
           t = localStorage.getItem(KEY);
@@ -28,11 +42,12 @@
             t = "dark";
           }
         }
-        var link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.id = "task-site-bootstrap-theme";
-        link.href = t === "light" ? LIGHT : DARK;
-        document.head.appendChild(link);
+        var desired = t === "light" ? LIGHT : DARK;
+        var link = document.getElementById("task-site-bootstrap-theme");
+        if (link && link.getAttribute("href") !== desired) {
+          link.href = desired;
+        }
+        persistCookie(t);
         document.documentElement.dataset.dashboardTheme = t;
       })();
     </script>
@@ -338,10 +353,19 @@
     <script>
       (function () {
         var KEY = "taskapp-admin-theme";
-        var DARK =
-          "https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/cyborg/bootstrap.min.css";
-        var LIGHT =
-          "https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/flatly/bootstrap.min.css";
+        var COOKIE_NAME = "{{ site_theme_cookie_name }}";
+        var DARK = "{{ site_bootswatch_dark_url }}";
+        var LIGHT = "{{ site_bootswatch_light_url }}";
+
+        function persistSiteThemeCookie(theme) {
+          try {
+            document.cookie =
+              COOKIE_NAME +
+              "=" +
+              (theme === "light" ? "light" : "dark") +
+              "; Path=/; Max-Age=31536000; SameSite=Lax";
+          } catch (e) {}
+        }
 
         function getTheme() {
           var t = document.body.dataset.dashboardTheme;
@@ -362,6 +386,7 @@
           try {
             localStorage.setItem(KEY, isLight ? "light" : "dark");
           } catch (e) {}
+          persistSiteThemeCookie(isLight ? "light" : "dark");
 
           ["task-site-theme-checkbox", "task-site-theme-checkbox-public"].forEach(
             function (id) {
