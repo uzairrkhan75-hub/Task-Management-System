@@ -260,8 +260,7 @@
 
   function init() {
     injectToggleStyles();
-    const preferredTheme = getStoredTheme();
-    applyTheme(preferredTheme === "light" ? "light" : "dark");
+    applyTheme("dark");
     createToggle();
 
     const observer = new MutationObserver(() => {

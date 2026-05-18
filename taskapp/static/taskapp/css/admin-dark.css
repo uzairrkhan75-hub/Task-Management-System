@@ -12,8 +12,16 @@ body[data-dashboard-theme="light"] {
   --dashboard-table-head: rgba(15, 23, 42, 0.04);
   --dashboard-accent: #2563eb;
   background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 30%),
-    radial-gradient(circle at top right, rgba(6, 182, 212, 0.08), transparent 28%),
+    radial-gradient(
+      circle at top left,
+      rgba(37, 99, 235, 0.12),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(6, 182, 212, 0.08),
+      transparent 28%
+    ),
     linear-gradient(180deg, #f4f7fb 0%, #eef3f9 100%) !important;
   color: var(--dashboard-text) !important;
 }
@@ -44,8 +52,12 @@ body[data-dashboard-theme="light"] .form-select,
 body[data-dashboard-theme="light"] .custom-select,
 body[data-dashboard-theme="light"] .input-group-text,
 body[data-dashboard-theme="light"] .form-control-plaintext,
-body[data-dashboard-theme="light"] .select2-container--bootstrap4 .select2-selection,
-body[data-dashboard-theme="light"] .select2-container--default .select2-selection,
+body[data-dashboard-theme="light"]
+  .select2-container--bootstrap4
+  .select2-selection,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-selection,
 body[data-dashboard-theme="light"] .select2-dropdown,
 body[data-dashboard-theme="light"] select,
 body[data-dashboard-theme="light"] textarea,
@@ -93,39 +105,81 @@ body[data-dashboard-theme="light"] .table th {
 body[data-dashboard-theme="light"] .form-control:focus,
 body[data-dashboard-theme="light"] .form-select:focus,
 body[data-dashboard-theme="light"] .custom-select:focus,
-body[data-dashboard-theme="light"] .select2-container--bootstrap4 .select2-selection--focus,
-body[data-dashboard-theme="light"] .select2-container--default .select2-selection--focus {
+body[data-dashboard-theme="light"]
+  .select2-container--bootstrap4
+  .select2-selection--focus,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-selection--focus {
   border-color: rgba(37, 99, 235, 0.8) !important;
   box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.16) !important;
 }
 
-body[data-dashboard-theme="light"] .select2-container--bootstrap4 .select2-selection--single,
-body[data-dashboard-theme="light"] .select2-container--bootstrap4 .select2-selection--multiple,
-body[data-dashboard-theme="light"] .select2-container--default .select2-selection--single,
-body[data-dashboard-theme="light"] .select2-container--default .select2-selection--multiple {
+body[data-dashboard-theme="light"]
+  .select2-container--bootstrap4
+  .select2-selection--single,
+body[data-dashboard-theme="light"]
+  .select2-container--bootstrap4
+  .select2-selection--multiple,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-selection--single,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-selection--multiple {
   min-height: calc(2.25rem + 2px) !important;
 }
 
-body[data-dashboard-theme="light"] .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered,
-body[data-dashboard-theme="light"] .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__rendered,
-body[data-dashboard-theme="light"] .select2-container--default .select2-selection--single .select2-selection__rendered,
-body[data-dashboard-theme="light"] .select2-container--default .select2-selection--multiple .select2-selection__rendered,
-body[data-dashboard-theme="light"] .select2-container--default .select2-selection__placeholder,
-body[data-dashboard-theme="light"] .select2-container--default .select2-results__option,
-body[data-dashboard-theme="light"] .select2-container--default .select2-selection__choice,
-body[data-dashboard-theme="light"] .select2-container--default .select2-search__field {
+body[data-dashboard-theme="light"]
+  .select2-container--bootstrap4
+  .select2-selection--single
+  .select2-selection__rendered,
+body[data-dashboard-theme="light"]
+  .select2-container--bootstrap4
+  .select2-selection--multiple
+  .select2-selection__rendered,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-selection--single
+  .select2-selection__rendered,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-selection--multiple
+  .select2-selection__rendered,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-selection__placeholder,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-results__option,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-selection__choice,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-search__field {
   color: var(--dashboard-text) !important;
 }
 
-body[data-dashboard-theme="light"] .select2-container--default .select2-selection--single,
-body[data-dashboard-theme="light"] .select2-container--default .select2-selection--multiple,
-body[data-dashboard-theme="light"] .select2-container--default .select2-search__field {
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-selection--single,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-selection--multiple,
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-search__field {
   background: var(--dashboard-surface) !important;
   border: 1px solid var(--dashboard-border) !important;
 }
 
-body[data-dashboard-theme="light"] .select2-container--default .select2-results__option--highlighted[aria-selected],
-body[data-dashboard-theme="light"] .select2-container--default .select2-results__option[aria-selected="true"] {
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-results__option--highlighted[aria-selected],
+body[data-dashboard-theme="light"]
+  .select2-container--default
+  .select2-results__option[aria-selected="true"] {
   background: rgba(37, 99, 235, 0.14) !important;
   color: var(--dashboard-text) !important;
 }
@@ -205,4 +259,79 @@ body[data-dashboard-theme="light"] .btn-outline-light:hover {
 body[data-dashboard-theme="light"] ::placeholder {
   color: var(--dashboard-muted) !important;
   opacity: 1;
+}
+
+body[data-dashboard-theme="light"] .table a,
+body[data-dashboard-theme="light"] .table td a,
+body[data-dashboard-theme="light"] .table th a,
+body[data-dashboard-theme="light"] .card a,
+body[data-dashboard-theme="light"] .content-wrapper a {
+  color: #0f172a !important;
+}
+
+body[data-dashboard-theme="light"] .table a:hover,
+body[data-dashboard-theme="light"] .card a:hover,
+body[data-dashboard-theme="light"] .content-wrapper a:hover {
+  color: #2563eb !important;
+}
+
+body[data-dashboard-theme="light"] .table tbody tr,
+body[data-dashboard-theme="light"] .table tbody tr > *,
+body[data-dashboard-theme="light"] .table-striped tbody tr,
+body[data-dashboard-theme="light"] .table-hover tbody tr:hover,
+body[data-dashboard-theme="light"] .table-active,
+body[data-dashboard-theme="light"] .selected,
+body[data-dashboard-theme="light"] tr.selected,
+body[data-dashboard-theme="light"] tr.selected > *,
+body[data-dashboard-theme="light"] .table tbody tr.table-active,
+body[data-dashboard-theme="light"] .table tbody tr.table-active > * {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+body[data-dashboard-theme="light"] .table tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+}
+
+body[data-dashboard-theme="light"] .table tbody tr:hover,
+body[data-dashboard-theme="light"] .table tbody tr:hover > * {
+  background-color: rgba(37, 99, 235, 0.06) !important;
+  color: #0f172a !important;
+}
+
+body[data-dashboard-theme="light"] .table tbody tr.selected a,
+body[data-dashboard-theme="light"] .table tbody tr.table-active a,
+body[data-dashboard-theme="light"] .table tbody tr:hover a {
+  color: #0f172a !important;
+}
+
+body[data-dashboard-theme="light"] .card-footer,
+body[data-dashboard-theme="light"] .card-footer *,
+body[data-dashboard-theme="light"] .content-wrapper .text-white,
+body[data-dashboard-theme="light"] .content-wrapper .text-light,
+body[data-dashboard-theme="light"] .content-wrapper .text-muted,
+body[data-dashboard-theme="light"] .content-wrapper .text-secondary,
+body[data-dashboard-theme="light"] .dataTables_info,
+body[data-dashboard-theme="light"] .dataTables_length,
+body[data-dashboard-theme="light"] .dataTables_paginate,
+body[data-dashboard-theme="light"] .pagination,
+body[data-dashboard-theme="light"] .pagination *,
+body[data-dashboard-theme="light"] .page-link,
+body[data-dashboard-theme="light"] .page-item,
+body[data-dashboard-theme="light"] .page-item *,
+body[data-dashboard-theme="light"] .small-box-footer,
+body[data-dashboard-theme="light"] .info-box-text,
+body[data-dashboard-theme="light"] .info-box-number,
+body[data-dashboard-theme="light"] .description-block,
+body[data-dashboard-theme="light"] .description-block *,
+body[data-dashboard-theme="light"] .results,
+body[data-dashboard-theme="light"] .results *,
+body[data-dashboard-theme="light"] .summary,
+body[data-dashboard-theme="light"] .summary * {
+  color: #0f172a !important;
+}
+
+body[data-dashboard-theme="light"] .page-link:hover,
+body[data-dashboard-theme="light"] .page-item.active .page-link {
+  color: #2563eb !important;
 }
