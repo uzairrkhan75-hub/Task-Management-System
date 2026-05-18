@@ -5,13 +5,14 @@
   <a href="{% url 'task_create' %}" class="btn btn-primary">Add Task</a>
 </div>
 
-<table class="table table-bordered table-striped bg-white">
+<table class="table table-bordered table-striped">
   <thead>
     <tr>
       <th>Title</th>
       <th>Car</th>
       <th>Mechanic</th>
       <th>ETA</th>
+      <th>Priority</th>
       <th>Status</th>
       <th>Actions</th>
     </tr>
@@ -23,19 +24,61 @@
       <td>{{ task.car }}</td>
       <td>{{ task.mechanic }}</td>
       <td>
-        {% if task.promised_completion_at %} {{
-        task.promised_completion_at|date:"M d, Y, g:i a" }} {% else %}
+        {% if task.promised_completion_at %}
+        {{ task.promised_completion_at|date:"M d, Y, g:i a" }}
+        {% else %}
         <span class="text-muted">Not set</span>
         {% endif %}
       </td>
-      <td>
-        {% if task.status == 'completed' %}
-        <span class="badge bg-success">Completed</span>
-        {% elif task.status == 'in_progress' %}
-        <span class="badge bg-warning text-dark">In Progress</span>
-        {% else %}
-        <span class="badge bg-secondary">Pending</span>
-        {% endif %}
+      <td class="task-inline-cell">
+        <form
+          method="post"
+          action="{% url 'task_set_priority' task.id %}"
+          class="task-inline-form"
+        >
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+          <label class="visually-hidden" for="prio-{{ task.id }}"
+            >Priority for {{ task.title }}</label
+          >
+          <select
+            name="priority"
+            id="prio-{{ task.id }}"
+            class="form-select form-select-sm enum-select enum-task-priority task-inline-select"
+            onchange="this.form.submit()"
+          >
+            {% for value, label in task_priority_choices %}
+            <option value="{{ value }}" {% if task.priority == value %}selected{% endif %}>
+              {{ label }}
+            </option>
+            {% endfor %}
+          </select>
+        </form>
+      </td>
+      <td class="task-inline-cell">
+        <form
+          method="post"
+          action="{% url 'task_set_status' task.id %}"
+          class="task-inline-form"
+        >
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+          <label class="visually-hidden" for="st-{{ task.id }}"
+            >Status for {{ task.title }}</label
+          >
+          <select
+            name="status"
+            id="st-{{ task.id }}"
+            class="form-select form-select-sm enum-select enum-task-status task-inline-select"
+            onchange="this.form.submit()"
+          >
+            {% for value, label in task_status_choices %}
+            <option value="{{ value }}" {% if task.status == value %}selected{% endif %}>
+              {{ label }}
+            </option>
+            {% endfor %}
+          </select>
+        </form>
       </td>
       <td>
         <a href="{% url 'task_update' task.id %}" class="btn btn-warning btn-sm"

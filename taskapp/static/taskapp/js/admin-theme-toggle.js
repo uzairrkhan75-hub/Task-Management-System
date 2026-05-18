@@ -258,10 +258,10 @@
     }
   }
 
-  function init() {
-    injectToggleStyles();
-    applyTheme("dark");
-    createToggle();
+    function init() {
+      injectToggleStyles();
+      applyTheme(getStoredTheme());
+      createToggle();
 
     const observer = new MutationObserver(() => {
       if (document.body.dataset.dashboardTheme === "dark") {

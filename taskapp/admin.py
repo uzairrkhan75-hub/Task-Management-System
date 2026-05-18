@@ -8,6 +8,9 @@ class MechanicAdmin(admin.ModelAdmin):
     list_display = (
         'name',
         'specialization',
+        'availability_display',
+        'on_leave',
+        'manual_busy',
         'phone_number',
         'is_active',
         'created_at',
@@ -15,6 +18,8 @@ class MechanicAdmin(admin.ModelAdmin):
 
     list_filter = (
         'is_active',
+        'is_on_leave',
+        'is_manually_busy',
         'specialization',
     )
 
@@ -25,6 +30,18 @@ class MechanicAdmin(admin.ModelAdmin):
     )
 
     ordering = ('name',)
+
+    @admin.display(boolean=True, description='On leave')
+    def on_leave(self, obj):
+        return obj.is_on_leave
+
+    @admin.display(boolean=True, description='Manual busy')
+    def manual_busy(self, obj):
+        return obj.is_manually_busy
+
+    @admin.display(description='Availability')
+    def availability_display(self, obj):
+        return obj.availability_label
 
 
 @admin.register(Cars)

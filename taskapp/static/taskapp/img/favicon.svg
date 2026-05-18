@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 256 256" role="img" aria-label="Drivex">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+  <path fill-rule="evenodd"
+    d="M 40 40 L 40 216 L 114 216 C 250 216 250 40 114 40 Z
+       M 80 82 L 80 174 C 224 174 224 82 80 82 Z"
+    fill="#07111f" opacity="0.92"/>
+</svg>

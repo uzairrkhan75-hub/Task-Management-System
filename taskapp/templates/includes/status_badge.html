@@ -1,0 +1,13 @@
+{% if status == 'completed' %}
+<span class="status-badge status-badge--completed">{{ label }}</span>
+{% elif status == 'in_progress' %}
+<span class="status-badge status-badge--in-progress">{{ label }}</span>
+{% elif status == 'assigned' %}
+<span class="status-badge status-badge--assigned">{{ label }}</span>
+{% elif status == 'pending' %}
+<span class="status-badge status-badge--pending">{{ label }}</span>
+{% elif status == 'waiting' %}
+<span class="status-badge status-badge--waiting">{{ label }}</span>
+{% else %}
+<span class="status-badge status-badge--waiting">{{ label }}</span>
+{% endif %}

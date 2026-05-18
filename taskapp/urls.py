@@ -13,6 +13,9 @@ from .views import (
     TaskCreateView,
     TaskUpdateView,
     TaskDeleteView,
+    mechanic_set_availability,
+    task_set_status,
+    task_set_priority,
 )
 
 urlpatterns = [
@@ -31,10 +34,21 @@ urlpatterns = [
          MechanicUpdateView.as_view(), name='mechanic_update'),
     path('mechanics/<int:pk>/delete/',
          MechanicDeleteView.as_view(), name='mechanic_delete'),
+    path(
+        'mechanics/<int:pk>/availability/',
+        mechanic_set_availability,
+        name='mechanic_set_availability',
+    ),
 
     # Tasks
     path('tasks/', TaskListView.as_view(), name='task_list'),
     path('tasks/create/', TaskCreateView.as_view(), name='task_create'),
     path('tasks/<int:pk>/update/', TaskUpdateView.as_view(), name='task_update'),
+    path('tasks/<int:pk>/set-status/', task_set_status, name='task_set_status'),
+    path(
+        'tasks/<int:pk>/set-priority/',
+        task_set_priority,
+        name='task_set_priority',
+    ),
     path('tasks/<int:pk>/delete/', TaskDeleteView.as_view(), name='task_delete'),
 ]

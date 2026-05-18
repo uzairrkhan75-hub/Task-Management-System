@@ -1,0 +1,9 @@
+{% if priority == 'high' %}
+<span class="status-badge status-badge--priority-high">{{ label }}</span>
+{% elif priority == 'medium' %}
+<span class="status-badge status-badge--priority-medium">{{ label }}</span>
+{% elif priority == 'low' %}
+<span class="status-badge status-badge--priority-low">{{ label }}</span>
+{% else %}
+<span class="status-badge status-badge--priority-medium">{{ label }}</span>
+{% endif %}

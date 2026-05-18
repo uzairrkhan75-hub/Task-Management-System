@@ -11,6 +11,14 @@ class Mechanic(models.Model):
     specialization = models.CharField(max_length=30, blank=True)
     phone_number = models.CharField(max_length=20, blank=True)
     is_active = models.BooleanField(default=True)
+    is_on_leave = models.BooleanField(
+        default=False,
+        help_text='Mark when the mechanic is unavailable (leave).',
+    )
+    is_manually_busy = models.BooleanField(
+        default=False,
+        help_text='When set and there is no open task, shows as Busy.',
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -18,6 +26,30 @@ class Mechanic(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def is_busy(self):
+        return self.tasks.exclude(status='completed').exists()
+
+    @property
+    def is_effectively_busy(self):
+        return self.is_busy or self.is_manually_busy
+
+    @property
+    def availability_status(self):
+        if self.is_on_leave:
+            return 'on_leave'
+        if self.is_effectively_busy:
+            return 'busy'
+        return 'free'
+
+    @property
+    def availability_label(self):
+        if self.is_on_leave:
+            return 'On Leave'
+        if self.is_effectively_busy:
+            return 'Busy'
+        return 'Free'
 
 
 class Cars(models.Model):
@@ -132,6 +164,11 @@ class Task(models.Model):
             self.promised_completion_at = None
 
         super().save(*args, **kwargs)
+
+        if self.mechanic_id and self.status != 'completed':
+            Mechanic.objects.filter(pk=self.mechanic_id).update(
+                is_manually_busy=False,
+            )
 
     def __str__(self):
         return f"{self.title} - {self.car.registration_number}"

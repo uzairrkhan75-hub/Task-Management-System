@@ -108,6 +108,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 JAZZMIN_SETTINGS = {
 
     "site_title": "Drivex Admin",
@@ -121,6 +122,7 @@ JAZZMIN_SETTINGS = {
     "copyright": "Drivex",
 
     "site_logo": "taskapp/img/admin-logo.svg",
+    "site_icon": "taskapp/img/favicon.svg",
 
     "login_logo_dark": "taskapp/img/admin-logo.svg",
 
