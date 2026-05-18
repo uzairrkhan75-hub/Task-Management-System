@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Mechanics</h2>
+    <a href="{% url 'mechanic_create' %}" class="btn btn-primary">Add Mechanic</a>
+</div>
+
+<table class="table table-bordered table-striped bg-white">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Specialization</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for mechanic in mechanics %}
+        <tr>
+            <td>{{ mechanic.name }}</td>
+            <td>{{ mechanic.specialization }}</td>
+            <td>
+                <a href="{% url 'mechanic_update' mechanic.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'mechanic_delete' mechanic.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
