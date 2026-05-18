@@ -110,15 +110,15 @@ USE_TZ = True
 STATIC_URL = 'static/'
 JAZZMIN_SETTINGS = {
 
-    "site_title": "Task-Management_system Admin",
+    "site_title": "Drivex Admin",
 
-    "site_header": "Task-Management_system Management",
+    "site_header": "Drivex",
 
-    "site_brand": "Task-Management_system",
+    "site_brand": "Drivex",
 
-    "welcome_sign": "Welcome to Task-Management_system",
+    "welcome_sign": "Welcome to Drivex",
 
-    "copyright": "Task-Management_system",
+    "copyright": "Drivex",
 
     "site_logo": "taskapp/img/admin-logo.svg",
 
