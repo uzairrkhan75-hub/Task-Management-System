@@ -418,7 +418,50 @@ body[data-dashboard-theme="light"] .page-item.active .page-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+/*
+ * Admin changelist tables — keep each row on one line; scroll horizontally
+ * instead of wrapping cells or stacking action pills (Tasks / Cars / etc.).
+ */
+body.change-list #changelist .card-body.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+body.change-list #result_list {
+  width: max-content;
+  min-width: 100%;
+  margin-bottom: 0;
+  table-layout: auto;
+}
+
+body.change-list #result_list thead th,
+body.change-list #result_list tbody td {
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Admin dashboard — mechanic workload table */
+.admin-dash-mechanic-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.admin-dash-mechanic-scroll table {
+  width: max-content;
+  min-width: 100%;
+  margin-bottom: 0;
+}
+
+.admin-dash-mechanic-scroll table thead th,
+.admin-dash-mechanic-scroll table tbody td {
+  white-space: nowrap;
+  vertical-align: middle;
 }
 
 .admin-action-btn {

@@ -26,6 +26,39 @@ class GroupAdmin(DjangoGroupAdmin):
     sortable_by = ()
 
 
+def admin_edit_delete_actions(obj, *, edit_title: str, delete_title: str):
+    """Pill Edit / Delete links (styled via admin-dark.css)."""
+    opts = obj._meta
+    change_url = reverse(
+        f'admin:{opts.app_label}_{opts.model_name}_change',
+        args=[obj.pk],
+    )
+    delete_url = reverse(
+        f'admin:{opts.app_label}_{opts.model_name}_delete',
+        args=[obj.pk],
+    )
+    return format_html(
+        '<div class="admin-row-actions" role="group">'
+        '<a class="admin-action-btn admin-action-btn--edit" href="{}" title="{}" aria-label="{}">'
+        '<i class="fas fa-edit" aria-hidden="true"></i>'
+        '<span class="admin-action-btn__label">{}</span>'
+        '</a>'
+        '<a class="admin-action-btn admin-action-btn--delete" href="{}" title="{}" aria-label="{}">'
+        '<i class="fas fa-trash-alt" aria-hidden="true"></i>'
+        '<span class="admin-action-btn__label">{}</span>'
+        '</a>'
+        '</div>',
+        change_url,
+        edit_title,
+        _('Edit'),
+        _('Edit'),
+        delete_url,
+        delete_title,
+        _('Delete'),
+        _('Delete'),
+    )
+
+
 @admin.register(Mechanic)
 class MechanicAdmin(admin.ModelAdmin):
 
@@ -39,6 +72,7 @@ class MechanicAdmin(admin.ModelAdmin):
         'phone_number',
         'is_active',
         'created_at',
+        'admin_actions_display',
     )
 
     list_filter = (
@@ -70,7 +104,13 @@ class MechanicAdmin(admin.ModelAdmin):
     def availability_display(self, obj):
         return obj.availability_label
 
-
+    @admin.display(description=_('Actions'), ordering=False)
+    def admin_actions_display(self, obj):
+        return admin_edit_delete_actions(
+            obj,
+            edit_title=_('Edit mechanic "%(name)s"') % {'name': obj.name},
+            delete_title=_('Delete mechanic "%(name)s"') % {'name': obj.name},
+        )
 @admin.register(Cars)
 class CarAdmin(admin.ModelAdmin):
 
@@ -81,6 +121,7 @@ class CarAdmin(admin.ModelAdmin):
         'customer_name',
         'status',
         'created_at',
+        'admin_actions_display',
     )
 
     list_filter = (
@@ -97,6 +138,16 @@ class CarAdmin(admin.ModelAdmin):
 
     ordering = ('-created_at',)
 
+    @admin.display(description=_('Actions'), ordering=False)
+    def admin_actions_display(self, obj):
+        return admin_edit_delete_actions(
+            obj,
+            edit_title=_('Edit car %(reg)s')
+            % {'reg': obj.registration_number},
+            delete_title=_('Delete car %(reg)s')
+            % {'reg': obj.registration_number},
+        )
+
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
@@ -110,6 +161,7 @@ class TaskAdmin(admin.ModelAdmin):
         'estimated_hours',
         'promised_completion_at',
         'created_at',
+        'admin_actions_display',
     )
 
     list_filter = (
@@ -178,6 +230,15 @@ class TaskAdmin(admin.ModelAdmin):
         '-created_at',
     )
 
+    @admin.display(description=_('Actions'), ordering=False)
+    def admin_actions_display(self, obj):
+        label = obj.title[:120] + ('…' if len(obj.title) > 120 else '')
+        return admin_edit_delete_actions(
+            obj,
+            edit_title=_('Edit task "%(title)s"') % {'title': label},
+            delete_title=_('Delete task "%(title)s"') % {'title': label},
+        )
+
 
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
@@ -207,32 +268,9 @@ class UserAdmin(DjangoUserAdmin):
 
     @admin.display(description=_('Actions'), ordering=False)
     def user_actions_display(self, obj):
-        opts = User._meta
-        change_url = reverse(
-            f'admin:{opts.app_label}_{opts.model_name}_change',
-            args=[obj.pk],
-        )
-        delete_url = reverse(
-            f'admin:{opts.app_label}_{opts.model_name}_delete',
-            args=[obj.pk],
-        )
-        return format_html(
-            '<div class="admin-row-actions" role="group">'
-            '<a class="admin-action-btn admin-action-btn--edit" href="{}" title="{}" aria-label="{}">'
-            '<i class="fas fa-edit" aria-hidden="true"></i>'
-            '<span class="admin-action-btn__label">{}</span>'
-            '</a>'
-            '<a class="admin-action-btn admin-action-btn--delete" href="{}" title="{}" aria-label="{}">'
-            '<i class="fas fa-trash-alt" aria-hidden="true"></i>'
-            '<span class="admin-action-btn__label">{}</span>'
-            '</a>'
-            '</div>',
-            change_url,
-            _('Edit this user'),
-            _('Edit'),
-            _('Edit'),
-            delete_url,
-            _('Delete this user'),
-            _('Delete'),
-            _('Delete'),
+        return admin_edit_delete_actions(
+            obj,
+            edit_title=_('Edit user %(username)s') % {'username': obj.username},
+            delete_title=_('Delete user %(username)s')
+            % {'username': obj.username},
         )

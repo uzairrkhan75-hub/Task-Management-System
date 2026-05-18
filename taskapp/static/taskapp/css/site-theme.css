@@ -1541,7 +1541,8 @@ body[data-dashboard-theme="light"] .site-sidebar-theme .theme-toggle-mode {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .site-main-body .shop-action-btn {
@@ -1657,4 +1658,23 @@ body[data-dashboard-theme="light"] .site-main-body .shop-action-btn--delete:focu
   .site-main-body .shop-action-btn:hover {
     transform: none;
   }
+}
+
+/* Horizontal scroll for wide shop lists — single-line rows */
+.site-main-body .shop-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+
+.site-main-body .shop-table-scroll > table {
+  width: max-content;
+  min-width: 100%;
+  margin-bottom: 0;
+}
+
+.site-main-body .shop-table-scroll > table thead th,
+.site-main-body .shop-table-scroll > table tbody td {
+  white-space: nowrap;
+  vertical-align: middle;
 }

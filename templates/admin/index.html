@@ -62,13 +62,14 @@
             </div>
             <div class="card-body p-0">
                 {% if mechanic_pending_rows %}
-                <div class="table-responsive">
+                <div class="table-responsive admin-dash-mechanic-scroll">
                     <table class="table table-sm table-striped mb-0">
                         <thead>
                             <tr>
                                 <th>{% trans 'Mechanic' %}</th>
                                 <th class="text-center">{% trans 'Pending' %}</th>
                                 <th class="text-center">{% trans 'In progress' %}</th>
+                                <th class="text-end text-nowrap">{% trans 'Actions' %}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -93,6 +94,28 @@
                                     {% else %}
                                     <span class="text-muted">0</span>
                                     {% endif %}
+                                </td>
+                                <td class="text-end align-middle text-nowrap">
+                                    <div class="admin-row-actions">
+                                        <a
+                                            class="admin-action-btn admin-action-btn--edit"
+                                            href="{% url 'admin:taskapp_mechanic_change' row.pk %}"
+                                            title="{% blocktrans with name=row.name %}Edit mechanic {{ name }}{% endblocktrans %}"
+                                            aria-label="{% trans 'Edit' %}"
+                                        >
+                                            <i class="fas fa-edit" aria-hidden="true"></i>
+                                            <span class="admin-action-btn__label">{% trans 'Edit' %}</span>
+                                        </a>
+                                        <a
+                                            class="admin-action-btn admin-action-btn--delete"
+                                            href="{% url 'admin:taskapp_mechanic_delete' row.pk %}"
+                                            title="{% blocktrans with name=row.name %}Delete mechanic {{ name }}{% endblocktrans %}"
+                                            aria-label="{% trans 'Delete' %}"
+                                        >
+                                            <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                            <span class="admin-action-btn__label">{% trans 'Delete' %}</span>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                             {% endfor %}
