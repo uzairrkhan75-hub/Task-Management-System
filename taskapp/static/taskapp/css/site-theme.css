@@ -1,0 +1,60 @@
+:root {
+  --site-btn-start: #2563eb;
+  --site-btn-end: #22d3ee;
+  --site-btn-border: rgba(255, 255, 255, 0.14);
+  --site-btn-shadow: rgba(37, 99, 235, 0.28);
+}
+
+.site-navbar {
+  background: linear-gradient(180deg, #07111f 0%, #0b1728 100%) !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.site-navbar .navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.btn,
+.btn-primary,
+.btn-warning,
+.btn-danger,
+.btn-success,
+.btn-secondary,
+.btn-outline-light {
+  background: linear-gradient(
+    135deg,
+    var(--site-btn-start) 0%,
+    var(--site-btn-end) 100%
+  ) !important;
+  border: 1px solid var(--site-btn-border) !important;
+  color: #f8fbff !important;
+  box-shadow: 0 12px 28px var(--site-btn-shadow);
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn:hover,
+.btn-primary:hover,
+.btn-warning:hover,
+.btn-danger:hover,
+.btn-success:hover,
+.btn-secondary:hover,
+.btn-outline-light:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 16px 34px rgba(37, 99, 235, 0.34);
+  color: #ffffff !important;
+}
+
+.btn:focus,
+.btn-primary:focus,
+.btn-warning:focus,
+.btn-danger:focus,
+.btn-success:focus,
+.btn-secondary:focus,
+.btn-outline-light:focus {
+  box-shadow: 0 0 0 0.2rem rgba(34, 211, 238, 0.28) !important;
+}

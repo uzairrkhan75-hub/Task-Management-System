@@ -134,10 +134,6 @@ JAZZMIN_SETTINGS = {
 
     "custom_js": "taskapp/js/admin-theme-toggle.js",
 
-    "theme": "cyborg",
-
-    "dark_mode_theme": None,
-
     "show_ui_builder": False,
 
     "sidebar_fixed": True,
@@ -165,4 +161,18 @@ JAZZMIN_SETTINGS = {
     "default_icon_parents": "fas fa-folder-open",
 
     "default_icon_children": "fas fa-circle",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "cyborg",
+    "dark_mode_theme": "flatly",
+    "navbar": "navbar-dark navbar-primary",
+    "sidebar": "sidebar-dark-primary",
+    "accent": "accent-info",
+    "navbar_fixed": True,
+    "sidebar_fixed": True,
+    "layout_boxed": False,
+    "sidebar_nav_compact_style": True,
+    "sidebar_nav_flat_style": True,
+    "no_navbar_border": True,
 }
