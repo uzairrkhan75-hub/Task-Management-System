@@ -1,21 +1,26 @@
 from django.db import models
 
 # Create your models here.
+
+
 class Mechanic(models.Model):
-    name=models.CharField(max_length=30)
-    specialization=models.CharField(max_length=30, blank=True)
+    name = models.CharField(max_length=30)
+    specialization = models.CharField(max_length=30, blank=True)
     phone_number = models.CharField(max_length=20, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering=['name']
+        ordering = ['name']
+
     def __str__(self):
         return self.name
+
+
 class Cars(models.Model):
-    Status_choices=[
+    Status_choices = [
         ('waiting', 'Waiting'),
-        ('assigned','Assigned'),
+        ('assigned', 'Assigned'),
         ('in_progress', 'In-progress'),
         ('completed', 'Completed')
     ]
@@ -37,65 +42,67 @@ class Cars(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        verbose_name = 'Car'
+        verbose_name_plural = 'Cars'
 
     def __str__(self):
         return f"{self.registration_number} - {self.make} {self.model}"
 
+
 class Task(models.Model):
-        STATUS_CHOICES = [
-            ('pending', 'Pending'),
-            ('in_progress', 'In Progress'),
-            ('completed', 'Completed'),
-        ]
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('in_progress', 'In Progress'),
+        ('completed', 'Completed'),
+    ]
 
-        PRIORITY_CHOICES = [
-            ('low', 'Low'),
-            ('medium', 'Medium'),
-            ('high', 'High'),
-        ]
+    PRIORITY_CHOICES = [
+        ('low', 'Low'),
+        ('medium', 'Medium'),
+        ('high', 'High'),
+    ]
 
-        car = models.ForeignKey(
-            Cars,
-            on_delete=models.CASCADE,
-            related_name='tasks'
-        )
+    car = models.ForeignKey(
+        Cars,
+        on_delete=models.CASCADE,
+        related_name='tasks'
+    )
 
-        mechanic = models.ForeignKey(
-            Mechanic,
-            on_delete=models.SET_NULL,
-            null=True,
-            blank=True,
-            related_name='tasks'
-        )
+    mechanic = models.ForeignKey(
+        Mechanic,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='tasks'
+    )
 
-        title = models.CharField(max_length=200)
-        description = models.TextField(blank=True)
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
 
-        status = models.CharField(
-            max_length=20,
-            choices=STATUS_CHOICES,
-            default='pending'
-        )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
 
-        priority = models.CharField(
-            max_length=10,
-            choices=PRIORITY_CHOICES,
-            default='medium'
-        )
+    priority = models.CharField(
+        max_length=10,
+        choices=PRIORITY_CHOICES,
+        default='medium'
+    )
 
-        estimated_hours = models.DecimalField(
-            max_digits=4,
-            decimal_places=1,
-            null=True,
-            blank=True
-        )
+    estimated_hours = models.DecimalField(
+        max_digits=4,
+        decimal_places=1,
+        null=True,
+        blank=True
+    )
 
-        created_at = models.DateTimeField(auto_now_add=True)
-        updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-        class Meta:
-            ordering = ['status', '-created_at']
+    class Meta:
+        ordering = ['status', '-created_at']
 
-        def __str__(self):
-            return f"{self.title} - {self.car.registration_number}"
-
+    def __str__(self):
+        return f"{self.title} - {self.car.registration_number}"
