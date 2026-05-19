@@ -19,6 +19,7 @@
  */
 html {
   font-size: 16px !important;
+  overflow-x: hidden;
 }
 
 body.bg-body.text-body {
@@ -405,50 +406,71 @@ body[data-dashboard-theme="light"] .btn-danger:focus,
   background: #64748b;
 }
 
+/* Mechanics list — same pill + option treatment as Tasks inline priority/status selects */
+.mechanic-status-select.task-inline-select {
+  max-width: 11rem;
+}
+
 .mechanic-status-select {
-  max-width: 12rem;
-  border-radius: 999px;
+  border-radius: 999px !important;
   font-weight: 600;
-  font-size: 0.8125rem;
+  font-size: 0.8125rem !important;
   border-width: 1px;
+  line-height: 1.35;
+  cursor: pointer;
   transition:
     background-color 0.2s ease,
     color 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .mechanic-status-select--free {
-  background-color: #22c55e !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
+  background-color: #166534 !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
   color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(22, 101, 52, 0.35);
 }
 
 .mechanic-status-select--busy {
-  background-color: #0284c7 !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
+  background-color: #7f1d1d !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
   color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(127, 29, 29, 0.38);
 }
 
 .mechanic-status-select--on-leave {
-  background-color: #64748b !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  background-color: #1e40af !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
   color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.35);
 }
 
 .mechanic-status-select--free:focus {
-  box-shadow: 0 0 0 0.2rem rgba(34, 197, 94, 0.35) !important;
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow:
+    0 2px 8px rgba(22, 101, 52, 0.35),
+    0 0 0 0.2rem rgba(34, 197, 94, 0.4) !important;
+  color: #ffffff !important;
 }
 
 .mechanic-status-select--busy:focus {
-  box-shadow: 0 0 0 0.2rem rgba(2, 132, 199, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow:
+    0 2px 8px rgba(127, 29, 29, 0.38),
+    0 0 0 0.2rem rgba(248, 113, 113, 0.42) !important;
   color: #ffffff !important;
 }
 
 .mechanic-status-select--on-leave:focus {
-  box-shadow: 0 0 0 0.2rem rgba(100, 116, 139, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow:
+    0 2px 8px rgba(30, 64, 175, 0.35),
+    0 0 0 0.2rem rgba(96, 165, 250, 0.45) !important;
+  color: #ffffff !important;
 }
 
-/* Open list: white rows + dark text (native select; works in Chromium/Firefox; Safari may vary) */
+/* Open list: match enum-task-priority dropdown (native select; browser-dependent) */
 .mechanic-status-select option {
   background-color: #ffffff !important;
   color: #0f172a !important;
@@ -459,6 +481,18 @@ body[data-dashboard-theme="light"] .btn-danger:focus,
 .mechanic-status-select option:hover {
   background-color: #e2e8f0 !important;
   color: #0f172a !important;
+}
+
+body[data-dashboard-theme="light"] .mechanic-status-select--free {
+  box-shadow: 0 1px 4px rgba(22, 101, 52, 0.2);
+}
+
+body[data-dashboard-theme="light"] .mechanic-status-select--busy {
+  box-shadow: 0 1px 4px rgba(127, 29, 29, 0.22);
+}
+
+body[data-dashboard-theme="light"] .mechanic-status-select--on-leave {
+  box-shadow: 0 1px 4px rgba(30, 64, 175, 0.2);
 }
 
 /* Task form — status / priority enum colors */
@@ -474,44 +508,118 @@ select.enum-task-priority {
 }
 
 .enum-task-status--pending {
-  background-color: #64748b !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  background-color: #475569 !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
   color: #ffffff !important;
 }
 
 .enum-task-status--in-progress {
-  background-color: #0284c7 !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
+  background-color: #1e40af !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
   color: #ffffff !important;
 }
 
 .enum-task-status--completed {
-  background-color: #22c55e !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  background-color: #166534 !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
   color: #ffffff !important;
 }
 
+.task-inline-select.enum-task-status--pending {
+  box-shadow: 0 2px 8px rgba(71, 85, 105, 0.38);
+}
+
+.task-inline-select.enum-task-status--in-progress {
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.35);
+}
+
+.task-inline-select.enum-task-status--completed {
+  box-shadow: 0 2px 8px rgba(22, 101, 52, 0.35);
+}
+
 .enum-task-priority--low {
-  background-color: #14b8a6 !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  /* Calm queue — deeper teal reads “safe / routine” vs status greens */
+  background-color: #0f766e !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
   color: #ffffff !important;
 }
 
 .enum-task-priority--medium {
-  background-color: #6366f1 !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  /* Attention without alarm — sits between Low (calm) and High (urgent) */
+  background-color: #b45309 !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
   color: #ffffff !important;
 }
 
 .enum-task-priority--high {
-  background-color: #7c3aed !important;
-  border-color: rgba(255, 255, 255, 0.2) !important;
+  /* Urgent — matches mechanic “busy” red family */
+  background-color: #7f1d1d !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  color: #fef2f2 !important;
+}
+
+.task-inline-select.enum-task-priority--low {
+  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.32);
+}
+
+.task-inline-select.enum-task-priority--medium {
+  box-shadow: 0 2px 8px rgba(180, 83, 9, 0.34);
+}
+
+.task-inline-select.enum-task-priority--high {
+  box-shadow: 0 2px 8px rgba(127, 29, 29, 0.38);
+}
+
+.enum-task-status--pending:focus {
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow:
+    0 2px 8px rgba(71, 85, 105, 0.38),
+    0 0 0 0.2rem rgba(148, 163, 184, 0.42) !important;
   color: #ffffff !important;
 }
 
-select.enum-task-status:focus,
+.enum-task-status--in-progress:focus {
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow:
+    0 2px 8px rgba(30, 64, 175, 0.35),
+    0 0 0 0.2rem rgba(96, 165, 250, 0.45) !important;
+  color: #ffffff !important;
+}
+
+.enum-task-status--completed:focus {
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow:
+    0 2px 8px rgba(22, 101, 52, 0.35),
+    0 0 0 0.2rem rgba(34, 197, 94, 0.4) !important;
+  color: #ffffff !important;
+}
+
+.enum-task-priority--low:focus {
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow:
+    0 2px 8px rgba(15, 118, 110, 0.32),
+    0 0 0 0.2rem rgba(45, 212, 191, 0.35) !important;
+  color: #ffffff !important;
+}
+
+.enum-task-priority--medium:focus {
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow:
+    0 2px 8px rgba(180, 83, 9, 0.34),
+    0 0 0 0.2rem rgba(251, 191, 36, 0.35) !important;
+  color: #ffffff !important;
+}
+
+.enum-task-priority--high:focus {
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow:
+    0 2px 8px rgba(127, 29, 29, 0.38),
+    0 0 0 0.2rem rgba(248, 113, 113, 0.42) !important;
+  color: #fef2f2 !important;
+}
+
 select.enum-task-priority:focus {
-  border-color: rgba(255, 255, 255, 0.35) !important;
+  outline: none;
 }
 
 select.enum-task-status option,
@@ -540,6 +648,51 @@ select.enum-task-priority option:hover {
   font-size: 0.8125rem !important;
   padding-left: 0.85rem;
   padding-right: 2rem;
+}
+
+/* Tasks list — status pills match Mechanics row dropdown treatment */
+select.enum-task-status.task-inline-select {
+  cursor: pointer;
+  line-height: 1.35;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+select.enum-task-priority.task-inline-select {
+  cursor: pointer;
+  line-height: 1.35;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+body[data-dashboard-theme="light"] .task-inline-select.enum-task-status--pending {
+  box-shadow: 0 1px 4px rgba(71, 85, 105, 0.22);
+}
+
+body[data-dashboard-theme="light"] .task-inline-select.enum-task-status--in-progress {
+  box-shadow: 0 1px 4px rgba(30, 64, 175, 0.2);
+}
+
+body[data-dashboard-theme="light"] .task-inline-select.enum-task-status--completed {
+  box-shadow: 0 1px 4px rgba(22, 101, 52, 0.2);
+}
+
+body[data-dashboard-theme="light"] .task-inline-select.enum-task-priority--low {
+  box-shadow: 0 1px 4px rgba(15, 118, 110, 0.2);
+}
+
+body[data-dashboard-theme="light"] .task-inline-select.enum-task-priority--medium {
+  box-shadow: 0 1px 4px rgba(180, 83, 9, 0.2);
+}
+
+body[data-dashboard-theme="light"] .task-inline-select.enum-task-priority--high {
+  box-shadow: 0 1px 4px rgba(127, 29, 29, 0.22);
 }
 
 .eta-badge {
@@ -1479,9 +1632,14 @@ body[data-dashboard-theme="light"] .site-sidebar-theme .theme-toggle-mode {
 @media (max-width: 991.98px) {
   .site-sidebar {
     position: fixed;
+    /* Override the base flex-shrink:0 + width:260px so the sidebar takes 0 flex
+       space in the shell layout — the fixed width is still 260px visually */
+    flex-basis: 0px;
+    min-width: 0;
     left: 0;
     top: 0;
     bottom: 0;
+    width: 260px;
     transform: translateX(-100%);
     transition: transform 0.22s ease;
     box-shadow: 8px 0 32px rgba(0, 0, 0, 0.35);

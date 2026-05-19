@@ -5,6 +5,7 @@ from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import Group
 from django.urls import reverse
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from .models import Cars, Mechanic, Task
@@ -263,7 +264,7 @@ class UserAdmin(DjangoUserAdmin):
             variant = 'mechanic'
             label = _('Mechanic')
         else:
-            return format_html('<span class="text-muted">—</span>')
+            return mark_safe('<span class="text-muted">—</span>')
         return format_html(
             '<span class="shop-role-pill shop-role-pill--{}">{}</span>',
             variant,

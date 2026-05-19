@@ -47,12 +47,17 @@ class ShopLoginView(LoginView):
 
 @login_required
 def home(request):
-    if resolve_shop_access_role(request.user) is None:
-        raise PermissionDenied(
-            'Your account has no shop access. Ask an administrator to add you '
-            'to the Manager group or link your login to a mechanic profile.',
+    role = resolve_shop_access_role(request.user)
+    if role is None:
+        messages.error(
+            request,
+            'Your account has no shop access. Ask a manager to link your '
+            'login to a mechanic profile or add you to the Manager group.',
         )
-    if resolve_shop_access_role(request.user) == 'mechanic':
+        from django.contrib.auth import logout
+        logout(request)
+        return redirect('login')
+    if role == 'mechanic':
         return redirect('task_list')
     now = timezone.now()
     tasks = Task.objects.all()
@@ -83,7 +88,11 @@ def home(request):
     )
 
 
+@login_required
 def customer_eta(request):
+    if not is_shop_manager(request.user):
+        messages.error(request, 'Track Car is not available for mechanic accounts.')
+        return redirect('task_list')
     registration_number = request.GET.get('registration_number', '').strip()
     customer_car = None
     customer_tasks = []
@@ -323,8 +332,13 @@ def _redirect_after_task_inline(request):
 
 
 def _ensure_task_editable(request, task):
-    if not is_shop_manager(request.user):
-        raise PermissionDenied
+    if is_shop_manager(request.user):
+        return
+    from .rbac import get_mechanic_profile
+    mechanic = get_mechanic_profile(request.user)
+    if mechanic and task.mechanic_id == mechanic.pk:
+        return
+    raise PermissionDenied
 
 
 @login_required

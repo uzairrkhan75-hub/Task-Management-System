@@ -1,14 +1,14 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h2>{% if shop_role == 'mechanic' %}My tasks{% else %}Tasks{% endif %}</h2>
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+  <h2 class="mb-0">{% if shop_role == 'mechanic' %}My tasks{% else %}Tasks{% endif %}</h2>
   {% if is_shop_manager %}
   <a href="{% url 'task_create' %}" class="btn btn-primary">Add Task</a>
   {% endif %}
 </div>
 
 {% if shop_role == 'mechanic' %}
-<p class="text-muted small mb-3">You can view tasks assigned to you. Contact a manager to update assignments or job details.</p>
+<p class="text-muted small mb-3">You can view and update the status of tasks assigned to you. Contact a manager to change assignments or priority.</p>
 {% endif %}
 
 <div class="table-responsive shop-table-scroll">
@@ -43,17 +43,18 @@
         {% if is_shop_manager %}
         <form
           method="post"
-          action="{% url 'task_set_priority' task.id %}"
+          action="{% url 'task_set_priority' task.pk %}"
           class="task-inline-form"
+          autocomplete="off"
         >
           {% csrf_token %}
           <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-          <label class="visually-hidden" for="prio-{{ task.id }}"
+          <label class="visually-hidden" for="task-{{ task.pk }}-priority"
             >Priority for {{ task.title }}</label
           >
           <select
             name="priority"
-            id="prio-{{ task.id }}"
+            id="task-{{ task.pk }}-priority"
             class="form-select form-select-sm enum-select enum-task-priority task-inline-select"
             onchange="this.form.submit()"
           >
@@ -69,20 +70,21 @@
         {% endif %}
       </td>
       <td class="task-inline-cell">
-        {% if is_shop_manager %}
+        {% if is_shop_manager or shop_role == 'mechanic' %}
         <form
           method="post"
-          action="{% url 'task_set_status' task.id %}"
+          action="{% url 'task_set_status' task.pk %}"
           class="task-inline-form"
+          autocomplete="off"
         >
           {% csrf_token %}
           <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-          <label class="visually-hidden" for="st-{{ task.id }}"
+          <label class="visually-hidden" for="task-{{ task.pk }}-status"
             >Status for {{ task.title }}</label
           >
           <select
             name="status"
-            id="st-{{ task.id }}"
+            id="task-{{ task.pk }}-status"
             class="form-select form-select-sm enum-select enum-task-status task-inline-select"
             onchange="this.form.submit()"
           >
@@ -102,7 +104,7 @@
         <div class="shop-row-actions" role="group">
           <a
             class="shop-action-btn shop-action-btn--edit"
-            href="{% url 'task_update' task.id %}"
+            href="{% url 'task_update' task.pk %}"
             title="Edit task {{ task.title }}"
             aria-label="Edit"
             ><i class="fas fa-edit" aria-hidden="true"></i
@@ -110,7 +112,7 @@
           >
           <a
             class="shop-action-btn shop-action-btn--delete"
-            href="{% url 'task_delete' task.id %}"
+            href="{% url 'task_delete' task.pk %}"
             title="Delete task {{ task.title }}"
             aria-label="Delete"
             ><i class="fas fa-trash-alt" aria-hidden="true"></i

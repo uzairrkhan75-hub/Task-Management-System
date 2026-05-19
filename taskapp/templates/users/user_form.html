@@ -2,36 +2,40 @@
 
 {% block content %}
 
-<div class="card shadow-sm">
-  <div class="card-body">
-    <h2 class="mb-3">{{ form_heading }}</h2>
-    {% if edit_username %}
-    <p class="text-muted mb-4">
-      Username: <strong>{{ edit_username }}</strong> (cannot be changed here)
-    </p>
-    {% endif %}
-
-    {% if form.non_field_errors %}
-    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
-    {% endif %}
-
-    <form method="post">
-      {% csrf_token %}
-      {% for field in form %}
-      <div class="mb-3">
-        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
-        {% if field.help_text %}
-        <div class="form-text">{{ field.help_text|safe }}</div>
+<div class="row">
+  <div class="col-12 col-lg-8 col-xl-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="mb-3">{{ form_heading }}</h2>
+        {% if edit_username %}
+        <p class="text-muted mb-4">
+          Username: <strong>{{ edit_username }}</strong> (cannot be changed here)
+        </p>
         {% endif %}
-        {% for err in field.errors %}
-        <div class="invalid-feedback d-block">{{ err }}</div>
-        {% endfor %}
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="mb-3">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+            <div class="form-text">{{ field.help_text|safe }}</div>
+            {% endif %}
+            {% for err in field.errors %}
+            <div class="invalid-feedback d-block">{{ err }}</div>
+            {% endfor %}
+          </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-success">Save</button>
+          <a href="{% url 'shop_user_list' %}" class="btn btn-outline-secondary ms-1">Cancel</a>
+        </form>
       </div>
-      {% endfor %}
-      <button type="submit" class="btn btn-success">Save</button>
-      <a href="{% url 'shop_user_list' %}" class="btn btn-outline-secondary ms-1">Cancel</a>
-    </form>
+    </div>
   </div>
 </div>
 

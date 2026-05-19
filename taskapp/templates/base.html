@@ -121,6 +121,7 @@
           </div>
 
           <nav class="site-sidebar-nav">
+            {% if is_shop_manager %}
             <a
               href="{% url 'customer_eta' %}"
               class="site-sidebar-link {% if request.path == '/track-car/' %}active{% endif %}"
@@ -128,6 +129,7 @@
               ><i class="fas fa-map-marker-alt site-sidebar-icon" aria-hidden="true"></i>
               <span class="site-sidebar-label">{% trans 'Track Car' %}</span></a
             >
+            {% endif %}
             {% if is_shop_manager %}
             <a
               href="{% url 'home' %}"
