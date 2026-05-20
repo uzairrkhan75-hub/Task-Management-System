@@ -20,7 +20,7 @@ This file is read automatically by Claude Code at the start of every session. Re
 Task_Managment_system/       ← repo root (folder name has a typo, do not rename)
   manage.py
   task/                      ← Django project config
-    settings.py
+    settings/               ← package: base.py, development.py, production.py (__init__.py → development)
     urls.py
   taskapp/                   ← single Django app (all models, views, URLs)
     models.py
@@ -147,7 +147,7 @@ Defined in `taskapp/rbac.py`. Two roles in the shop UI (separate from Django adm
 # Activate venv
 .venv\Scripts\activate        # Windows
 
-# Run dev server
+# Run dev server (defaults to task.settings → development / SQLite)
 python manage.py runserver
 
 # After model changes
@@ -158,6 +158,7 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
+- **Production / Docker**: set `DJANGO_SETTINGS_MODULE=task.settings.production` and env vars documented in README (`SECRET_KEY`, `DATABASE_URL`, `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`). Use `docker-compose.yml` or Render.
 - Site: http://127.0.0.1:8000/
 - Admin: http://127.0.0.1:8000/admin/
 

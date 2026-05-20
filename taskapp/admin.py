@@ -112,6 +112,8 @@ class MechanicAdmin(admin.ModelAdmin):
             edit_title=_('Edit mechanic "%(name)s"') % {'name': obj.name},
             delete_title=_('Delete mechanic "%(name)s"') % {'name': obj.name},
         )
+
+
 @admin.register(Cars)
 class CarAdmin(admin.ModelAdmin):
 
@@ -244,7 +246,8 @@ class TaskAdmin(admin.ModelAdmin):
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
     _list_display = list(DjangoUserAdmin.list_display)
-    _list_display.insert(_list_display.index('username') + 1, 'shop_role_display')
+    _list_display.insert(_list_display.index(
+        'username') + 1, 'shop_role_display')
     _list_display.append('user_actions_display')
     list_display = tuple(_list_display)
 
@@ -275,7 +278,8 @@ class UserAdmin(DjangoUserAdmin):
     def user_actions_display(self, obj):
         return admin_edit_delete_actions(
             obj,
-            edit_title=_('Edit user %(username)s') % {'username': obj.username},
+            edit_title=_('Edit user %(username)s') % {
+                'username': obj.username},
             delete_title=_('Delete user %(username)s')
             % {'username': obj.username},
         )

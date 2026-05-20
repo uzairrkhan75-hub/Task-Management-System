@@ -1,5 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 
+{% if not shop_role %}
 <div class="page-shell">
   <aside class="page-sidebar d-none d-lg-block">
     <h5 class="mb-3">Quick Links</h5>
@@ -16,6 +17,7 @@
       Enter the registration number to see repair status and the ETA.
     </div>
   </aside>
+{% endif %}
 
   <section class="page-panel">
     <div class="eta-hero">
@@ -27,7 +29,7 @@
           <h1 class="mb-2">Track Your Car</h1>
           <p class="mb-0 text-muted">
             Check the repair status and expected completion time using your
-            car’s registration number.
+            car's registration number.
           </p>
         </div>
         <div>
@@ -174,11 +176,14 @@
     </div>
     {% else %}
     <div class="p-4 p-lg-5 text-muted">
-      Search a registration number to see the car’s ETA, status, and repair
+      Search a registration number to see the car's ETA, status, and repair
       tasks.
     </div>
     {% endif %}
   </section>
+
+{% if not shop_role %}
 </div>
+{% endif %}
 
 {% endblock %}

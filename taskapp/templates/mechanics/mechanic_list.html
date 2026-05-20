@@ -7,6 +7,19 @@
     <a href="{% url 'mechanic_create' %}" class="btn btn-primary">Add Mechanic</a>
 </div>
 
+{% for mechanic in mechanics %}
+<form
+    id="form-mechanic-avail-{{ mechanic.id }}"
+    method="post"
+    action="{% url 'mechanic_set_availability' mechanic.id %}"
+    class="mechanic-status-form"
+    aria-hidden="true"
+    style="display:none"
+>
+    {% csrf_token %}
+</form>
+{% endfor %}
+
 <div class="table-responsive shop-table-scroll">
 <table class="table table-bordered table-striped">
     <thead>
@@ -23,43 +36,37 @@
             <td>{{ mechanic.name }}</td>
             <td>{{ mechanic.specialization }}</td>
             <td class="mechanic-status-cell">
-                <form
-                    method="post"
-                    action="{% url 'mechanic_set_availability' mechanic.id %}"
-                    class="mechanic-status-form"
+                <label class="visually-hidden" for="avail-{{ mechanic.id }}">
+                    Status for {{ mechanic.name }}
+                </label>
+                <select
+                    name="availability"
+                    id="avail-{{ mechanic.id }}"
+                    form="form-mechanic-avail-{{ mechanic.id }}"
+                    class="form-select form-select-sm enum-select task-inline-select mechanic-status-select {% if mechanic.is_on_leave %}mechanic-status-select--on-leave{% elif mechanic.has_active_task or mechanic.is_manually_busy %}mechanic-status-select--busy{% else %}mechanic-status-select--free{% endif %}"
+                    onchange="document.getElementById('form-mechanic-avail-{{ mechanic.id }}').submit()"
                 >
-                    {% csrf_token %}
-                    <label class="visually-hidden" for="avail-{{ mechanic.id }}">
-                        Status for {{ mechanic.name }}
-                    </label>
-                    <select
-                        name="availability"
-                        id="avail-{{ mechanic.id }}"
-                        class="form-select form-select-sm enum-select task-inline-select mechanic-status-select {% if mechanic.is_on_leave %}mechanic-status-select--on-leave{% elif mechanic.has_active_task or mechanic.is_manually_busy %}mechanic-status-select--busy{% else %}mechanic-status-select--free{% endif %}"
-                        onchange="this.form.submit()"
+                    <option
+                        value="free"
+                        {% if not mechanic.is_on_leave and not mechanic.has_active_task and not mechanic.is_manually_busy %}selected{% endif %}
                     >
-                        <option
-                            value="free"
-                            {% if not mechanic.is_on_leave and not mechanic.has_active_task and not mechanic.is_manually_busy %}selected{% endif %}
-                        >
-                            Free
-                        </option>
-                        <option
-                            value="busy"
-                            {% if not mechanic.is_on_leave %}
-                              {% if mechanic.has_active_task or mechanic.is_manually_busy %}selected{% endif %}
-                            {% endif %}
-                        >
-                            Busy
-                        </option>
-                        <option
-                            value="on_leave"
-                            {% if mechanic.is_on_leave %}selected{% endif %}
-                        >
-                            On Leave
-                        </option>
-                    </select>
-                </form>
+                        Free
+                    </option>
+                    <option
+                        value="busy"
+                        {% if not mechanic.is_on_leave %}
+                          {% if mechanic.has_active_task or mechanic.is_manually_busy %}selected{% endif %}
+                        {% endif %}
+                    >
+                        Busy
+                    </option>
+                    <option
+                        value="on_leave"
+                        {% if mechanic.is_on_leave %}selected{% endif %}
+                    >
+                        On Leave
+                    </option>
+                </select>
             </td>
             <td class="shop-actions-cell text-nowrap">
                 <div class="shop-row-actions" role="group">

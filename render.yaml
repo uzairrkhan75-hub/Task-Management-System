@@ -1,0 +1,31 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# Fix `repo:` to your GitHub/GitLab repo before applying. Adjust regions/plans as needed.
+
+databases:
+  - name: drivex-db
+    plan: starter
+    region: oregon
+    databaseName: drivex
+    user: drivex
+
+services:
+  - type: web
+    name: drivex-web
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    region: oregon
+    healthCheckPath: /
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: task.settings.production
+      # Render injects the internal Postgres URL automatically:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: drivex-db
+          property: connectionString
+      # Set these manually in the dashboard when you create/update the blueprint,
+      # or add them via Render UI (recommended for secrets):
+      # SECRET_KEY
+      # ALLOWED_HOSTS  (comma-separated)
+      # CSRF_TRUSTED_ORIGINS  (e.g. https://drivex-web.onrender.com)

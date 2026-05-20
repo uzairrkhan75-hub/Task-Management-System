@@ -11,6 +11,37 @@
 <p class="text-muted small mb-3">You can view and update the status of tasks assigned to you. Contact a manager to change assignments or priority.</p>
 {% endif %}
 
+{% for task in tasks %}
+{% if is_shop_manager or shop_role == 'mechanic' %}
+<form
+  id="form-task-status-{{ task.pk }}"
+  method="post"
+  action="{% url 'task_set_status' task.pk %}"
+  class="task-inline-form"
+  autocomplete="off"
+  aria-hidden="true"
+  style="display:none"
+>
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+</form>
+{% endif %}
+{% if is_shop_manager %}
+<form
+  id="form-task-priority-{{ task.pk }}"
+  method="post"
+  action="{% url 'task_set_priority' task.pk %}"
+  class="task-inline-form"
+  autocomplete="off"
+  aria-hidden="true"
+  style="display:none"
+>
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.get_full_path }}" />
+</form>
+{% endif %}
+{% endfor %}
+
 <div class="table-responsive shop-table-scroll">
 <table class="table table-bordered table-striped">
   <thead>
@@ -41,60 +72,44 @@
       </td>
       <td class="task-inline-cell">
         {% if is_shop_manager %}
-        <form
-          method="post"
-          action="{% url 'task_set_priority' task.pk %}"
-          class="task-inline-form"
-          autocomplete="off"
+        <label class="visually-hidden" for="task-{{ task.pk }}-priority"
+          >Priority for {{ task.title }}</label
         >
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-          <label class="visually-hidden" for="task-{{ task.pk }}-priority"
-            >Priority for {{ task.title }}</label
-          >
-          <select
-            name="priority"
-            id="task-{{ task.pk }}-priority"
-            class="form-select form-select-sm enum-select enum-task-priority task-inline-select"
-            onchange="this.form.submit()"
-          >
-            {% for value, label in task_priority_choices %}
-            <option value="{{ value }}" {% if task.priority == value %}selected{% endif %}>
-              {{ label }}
-            </option>
-            {% endfor %}
-          </select>
-        </form>
+        <select
+          name="priority"
+          id="task-{{ task.pk }}-priority"
+          form="form-task-priority-{{ task.pk }}"
+          class="form-select form-select-sm enum-select enum-task-priority task-inline-select"
+          onchange="document.getElementById('form-task-priority-{{ task.pk }}').submit()"
+        >
+          {% for value, label in task_priority_choices %}
+          <option value="{{ value }}" {% if task.priority == value %}selected{% endif %}>
+            {{ label }}
+          </option>
+          {% endfor %}
+        </select>
         {% else %}
         {{ task.get_priority_display }}
         {% endif %}
       </td>
       <td class="task-inline-cell">
         {% if is_shop_manager or shop_role == 'mechanic' %}
-        <form
-          method="post"
-          action="{% url 'task_set_status' task.pk %}"
-          class="task-inline-form"
-          autocomplete="off"
+        <label class="visually-hidden" for="task-{{ task.pk }}-status"
+          >Status for {{ task.title }}</label
         >
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ request.get_full_path }}" />
-          <label class="visually-hidden" for="task-{{ task.pk }}-status"
-            >Status for {{ task.title }}</label
-          >
-          <select
-            name="status"
-            id="task-{{ task.pk }}-status"
-            class="form-select form-select-sm enum-select enum-task-status task-inline-select"
-            onchange="this.form.submit()"
-          >
-            {% for value, label in task_status_choices %}
-            <option value="{{ value }}" {% if task.status == value %}selected{% endif %}>
-              {{ label }}
-            </option>
-            {% endfor %}
-          </select>
-        </form>
+        <select
+          name="status"
+          id="task-{{ task.pk }}-status"
+          form="form-task-status-{{ task.pk }}"
+          class="form-select form-select-sm enum-select enum-task-status task-inline-select"
+          onchange="document.getElementById('form-task-status-{{ task.pk }}').submit()"
+        >
+          {% for value, label in task_status_choices %}
+          <option value="{{ value }}" {% if task.status == value %}selected{% endif %}>
+            {{ label }}
+          </option>
+          {% endfor %}
+        </select>
         {% else %}
         {{ task.get_status_display }}
         {% endif %}
