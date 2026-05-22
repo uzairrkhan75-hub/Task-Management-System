@@ -1,0 +1,16 @@
+{% load i18n %}
+{% if shop_breadcrumb_items %}
+<nav class="site-breadcrumbs mb-2 mb-md-3" aria-label="{% trans 'Breadcrumb' %}">
+  <ol class="breadcrumb mb-0 px-2 py-2 px-md-3 site-breadcrumbs__inner">
+    {% for item in shop_breadcrumb_items %}
+      {% if item.url %}
+      <li class="breadcrumb-item">
+        <a href="{{ item.url }}">{{ item.label }}</a>
+      </li>
+      {% else %}
+      <li class="breadcrumb-item active" aria-current="page">{{ item.label }}</li>
+      {% endif %}
+    {% endfor %}
+  </ol>
+</nav>
+{% endif %}

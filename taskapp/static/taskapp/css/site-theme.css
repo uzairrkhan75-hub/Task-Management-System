@@ -1629,6 +1629,56 @@ body[data-dashboard-theme="light"] .site-sidebar-theme .theme-toggle-mode {
   flex: 1;
 }
 
+/* Bootstrap breadcrumbs — tinted bar for sidebar + public layouts */
+.site-breadcrumbs .breadcrumb {
+  font-family: var(--site-font-sans) !important;
+  font-size: 0.9rem;
+  border-radius: 0.625rem !important;
+  --bs-breadcrumb-margin-bottom: 0;
+}
+
+.site-breadcrumbs__inner {
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+body[data-dashboard-theme="dark"] .site-breadcrumbs .breadcrumb-item a {
+  color: #93c5fd !important;
+  text-decoration: none;
+}
+
+body[data-dashboard-theme="dark"] .site-breadcrumbs .breadcrumb-item a:hover {
+  color: #bfdbfe !important;
+}
+
+body[data-dashboard-theme="dark"] .site-breadcrumbs .breadcrumb-item.active {
+  color: #f1f5f9 !important;
+}
+
+body[data-dashboard-theme="dark"] .site-breadcrumbs .breadcrumb-item + .breadcrumb-item::before {
+  color: rgba(148, 163, 184, 0.7) !important;
+}
+
+body[data-dashboard-theme="light"] .site-breadcrumbs__inner {
+  background: #f8fafc;
+  border-color: rgba(15, 23, 42, 0.1);
+}
+
+body[data-dashboard-theme="light"] .site-breadcrumbs .breadcrumb-item a {
+  color: var(--bs-link-color) !important;
+}
+
+body[data-dashboard-theme="light"] .site-breadcrumbs .breadcrumb-item.active {
+  color: #0f172a !important;
+}
+
+body[data-dashboard-theme="light"]
+  .site-breadcrumbs
+  .breadcrumb-item
+  + .breadcrumb-item::before {
+  color: #64748b !important;
+}
+
 @media (max-width: 991.98px) {
   .site-sidebar {
     position: fixed;

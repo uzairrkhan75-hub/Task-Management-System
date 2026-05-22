@@ -42,6 +42,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "taskapp.context_processors.admin_mechanic_task_summary",
                 "taskapp.context_processors.shop_roles",
+                "taskapp.context_processors.shop_breadcrumbs",
                 "taskapp.context_processors.site_shop_theme",
             ],
         },

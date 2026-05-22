@@ -340,6 +340,7 @@
     <div class="container">
     {% endif %}
 
+          {% include "includes/shop_breadcrumbs.html" %}
           {% block content %}{% endblock %}
 
     {% if user.is_authenticated and shop_role %}

@@ -3,6 +3,7 @@ from django.urls import reverse
 
 from .models import Mechanic, Task
 from .rbac import get_mechanic_profile, resolve_shop_access_role
+from .breadcrumbs import resolve_shop_breadcrumb_items
 
 # Bootswatch (must match URLs used in templates / theme toggle JS)
 SITE_BOOTSWATCH_DARK_CSS = (
@@ -56,6 +57,10 @@ def shop_roles(request):
         'is_shop_manager': role == 'manager',
         'shop_mechanic': get_mechanic_profile(user) if user.is_authenticated else None,
     }
+
+
+def shop_breadcrumbs(request):
+    return {'shop_breadcrumb_items': resolve_shop_breadcrumb_items(request)}
 
 
 def site_shop_theme(request):
